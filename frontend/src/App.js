@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+// import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import Header from './components/Header';
 
 import './App.css';
+import Chat from './pages/Chat/Chat';
 
 function App() {
-  const [responseData, setResponseData] = useState(null);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:8000/api/users');
+  //       setResponseData(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/users');
-        setResponseData(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <div>
-      <h2>Resposta do Backend:</h2>
-      {responseData ? <pre>{JSON.stringify(responseData, null, 2)}</pre> : <p>Carregando...</p>}
+      <Header></Header>
+      <Chat></Chat>
     </div>
   );
 }

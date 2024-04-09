@@ -1,0 +1,34 @@
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #d9d9d9;
+    padding: 15px 25px;
+}
+
+#header-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#logo {
+    background-color: aquamarine;
+    width: 60px;
+    height: 60px;
+}
+
+#header-title-area {
+    display: flex;
+    flex-direction: column;
+}
+
+#title {
+    margin: 0;
+    padding: 0;
+}
+
+#subtitle {
+    margin: 0;
+    padding: 0;
+}
