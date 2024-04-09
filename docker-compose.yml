@@ -1,0 +1,26 @@
+services:
+  django:
+    container_name: Backend
+    build:
+      context: backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  react:
+    container_name: Frontend
+    build:
+      context: frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgres:latest
+    container_name: DB
+    environment:
+      POSTGRES_PASSWORD: minha_senha
