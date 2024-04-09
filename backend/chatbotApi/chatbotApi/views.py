@@ -1,5 +1,10 @@
-from django.http import JsonResponse
+from django.contrib.auth.models import User
+from rest_framework import permissions, viewsets
 
-def test_view(request):
-    data = {'message': 'Esta eh uma resposta de teste do backend!'}
-    return JsonResponse(data)
+from .serializers import UserSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    # permission_classes = [permissions.IsAuthenticated]
