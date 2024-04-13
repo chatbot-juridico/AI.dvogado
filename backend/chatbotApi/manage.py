@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 import time
@@ -21,9 +21,7 @@ def check_database_connection():
     print("Database not available after 30 seconds. Exiting.")
     return False
 
-
 def main():
-    """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chatbotApi.settings')
     if(not check_database_connection()):
         pass
@@ -37,7 +35,6 @@ def main():
         ) from exc
     
     execute_from_command_line(sys.argv)
-
 
 if __name__ == '__main__':
     main()
