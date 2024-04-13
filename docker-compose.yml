@@ -1,6 +1,7 @@
 services:
   django:
     container_name: Backend
+    image: django_image
     build:
       context: backend
     volumes:
@@ -12,15 +13,17 @@ services:
 
   react:
     container_name: Frontend
+    image: react_image
     build:
-      context: frontend
-    volumes:
-      - ./frontend:/app
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
 
   db:
+    container_name: Database
     image: postgres:latest
-    container_name: DB
     environment:
       POSTGRES_PASSWORD: minha_senha
