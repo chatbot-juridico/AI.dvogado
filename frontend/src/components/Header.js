@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import './Header.css';
 
 function Header() {
-  const [isAtChat, setIsAtChat] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const currentPath = useLocation().pathname;
   const navigate = useNavigate();
@@ -17,12 +16,9 @@ function Header() {
 
   const handleAboutClick = () => {
     if (currentPath === '/') {
-      setIsAtChat(false);
       navigate('/about');
     } else {
-      setIsAtChat(true);
-      if (!isLoggedIn) navigate('/about');
-      else navigate('/');
+      navigate('/');
     }
   };
 
@@ -45,7 +41,7 @@ function Header() {
       </div>
       <div id='header-btn-area'>
         <Button as='a' variant='success' onClick={() => handleAboutClick()}>
-          {isAtChat ? 'O Projeto' : 'Chat'}
+          {currentPath === '/' ? 'O Projeto' : 'Chat'}
         </Button>
         <Button as='a' variant='success' onClick={() => handleLoginClick()}>
           {isLoggedIn ? 'Sair' : 'Login'}
