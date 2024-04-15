@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #d9d9d9;
+    background-color: #5574ff;
     padding: 15px 25px;
 }
 
@@ -10,10 +10,10 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    cursor: pointer;
 }
 
 #logo {
-    background-color: aquamarine;
     width: 60px;
     height: 60px;
 }
@@ -23,12 +23,14 @@
     flex-direction: column;
 }
 
-#title {
-    margin: 0;
-    padding: 0;
-}
-
+#title,
 #subtitle {
     margin: 0;
     padding: 0;
+    color: #FFFFFF;
+}
+
+#header-btn-area {
+    display: flex;
+    gap: 25px;
 }

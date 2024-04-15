@@ -1,7 +1,6 @@
 services:
   django:
     container_name: Backend
-    image: django_image
     build:
       context: backend
     volumes:
@@ -13,7 +12,6 @@ services:
 
   react:
     container_name: Frontend
-    image: react_image
     build:
       context: ./frontend
       dockerfile: Dockerfile
