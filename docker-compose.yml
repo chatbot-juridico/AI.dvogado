@@ -25,3 +25,5 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_PASSWORD: minha_senha
+    volumes:
+      - ./db-data:/backup
