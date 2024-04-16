@@ -7,6 +7,7 @@ import Login from './pages/Login/Login';
 import Chat from './pages/Chat/Chat';
 import About from './pages/About/About';
 import SignIn from './pages/SignIn/SignIn';
+import Profile from './pages/Profile/Profile';
 
 import './App.css';
 
@@ -20,8 +21,12 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/login' element={<Login />} />
           <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Router>
+      <div style={{ textAlign: 'center' }}>
+        <p style={{ fontSize: '14px', marginBottom: '5px' }}>Versão 1.0 - Licença MIT</p>
+      </div>
     </React.StrictMode>
   );
 }

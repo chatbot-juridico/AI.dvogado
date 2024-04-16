@@ -32,6 +32,12 @@ function Header() {
     navigate('/login');
   };
 
+  const handleProfileClick = () => {
+    if (isLoggedIn) {
+      navigate('/profile');
+    }
+  };
+
   return (
     <div id='header'>
       <div id='header-area' onClick={() => navigate('/')}>
@@ -42,6 +48,14 @@ function Header() {
         </div>
       </div>
       <div id='header-btn-area'>
+        {isLoggedIn ? (
+          <Button as='a' variant='success' onClick={() => handleProfileClick()}>
+            Perfil
+          </Button>
+        ) : (
+          <></>
+        )}
+
         <Button as='a' variant='success' onClick={() => handleAboutClick()}>
           {currentPath === '/' ? 'O Projeto' : 'Chat'}
         </Button>
