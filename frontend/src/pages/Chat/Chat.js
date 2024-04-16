@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios'; // TEMP
 
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -17,30 +18,25 @@ function Chat() {
   const [input, setInput] = useState();
   const divRef = useRef();
 
-  const scrollDown = () => {
-    const div = divRef.current;
-    div.scrollTop = div.scrollHeight + div.clientHeight;
-  };
-
   useEffect(() => {
     getMessages();
   }, []);
 
   const getMessages = () => {
-    api
-      .get('api/chat/')
-      .then((response) => {
-        setMessages(response.data);
-        setTimeout(scrollDown, 100);
-      })
-      .catch((err) => {
-        console.error('Error:' + err);
-      });
+    api.get('api/chat/').then((response) => {
+      if (response.data.length == 0) return;
+      setMessages(response.data);
+      const lastMessage = response.data[response.data.length - 1];
+      if (lastMessage.user !== 1) {
+        getBotAnswer(lastMessage.text);
+      }
+      setTimeout(scrollDown, 100);
+    });
   };
 
-  const sendMessage = () => {
+  const sendMessage = (message, user) => {
     api
-      .post('api/chat/', { text: input })
+      .post('api/chat/', { text: message, user })
       .then(() => {
         getMessages();
       })
@@ -52,12 +48,38 @@ function Chat() {
       });
   };
 
+  const getBotAnswer = async (message) => {
+    const options = {
+      method: 'GET',
+      url: 'https://famous-quotes4.p.rapidapi.com/random',
+      params: {
+        category: 'all',
+        count: '1',
+      },
+      headers: {
+        'X-RapidAPI-Key': '48969325c7msh182124cce3b96dap1c5a70jsn7bca8705e06e',
+        'X-RapidAPI-Host': 'famous-quotes4.p.rapidapi.com',
+      },
+    };
+    try {
+      const response = await axios.request(options);
+      sendMessage(response.data[0].text, 1);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const toggleMenu = (event) => {
     const icon = event.target;
     let currentRotation =
       parseInt(icon.style.transform.replace('rotate(', '').replace('deg)', ''), 10) || 0;
     currentRotation += 90;
     icon.style.transform = `rotate(${currentRotation}deg)`;
+  };
+
+  const scrollDown = () => {
+    const div = divRef.current;
+    div.scrollTop = div.scrollHeight + div.clientHeight;
   };
 
   return (
@@ -74,17 +96,6 @@ function Chat() {
           <Card style={{ height: '545px', maxHeight: '545px' }}>
             <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
               <Card.Title style={{ backgroundColor: '#D2D2D2', marginBottom: '0' }}>
-                <Button variant='link' onClick={($event) => toggleMenu($event)}>
-                  <img
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      transition: 'transform 0.3s ease-in-out',
-                    }}
-                    src={menu}
-                    alt='*'
-                  ></img>
-                </Button>
                 Chat
               </Card.Title>
               <div
@@ -96,23 +107,22 @@ function Chat() {
                   padding: '15px 0',
                 }}
               >
-                {messages?.map(function (res, idx) {
+                {messages?.map(function (message, idx) {
+                  const isBot = message.user === 1;
                   return (
                     <Card.Text
                       key={idx}
                       style={{
-                        margin: ' 10px 20%',
+                        margin: isBot ? '10px 10px 10px 175px' : '10px 175px 10px 10px',
                         padding: '10px',
-                        backgroundColor: '#EEE',
+                        backgroundColor: isBot ? '#FFD700' : '#EEE',
                         borderRadius: '15px',
                         display: 'flex',
                         gap: '15px',
                       }}
                     >
                       <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
-                      <span>
-                        {res.text} - {res.created}
-                      </span>
+                      <span>{message.text}</span>
                     </Card.Text>
                   );
                 })}
@@ -143,7 +153,7 @@ function Chat() {
                 <Button
                   as='a'
                   variant='success'
-                  onClick={() => sendMessage()}
+                  onClick={() => sendMessage(input)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -159,9 +169,6 @@ function Chat() {
                     alt='->'
                   ></img>
                 </Button>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: '14px', marginBottom: '5px' }}>Versão 0.2 - Licença MIT</p>
               </div>
             </Card.Body>
           </Card>
@@ -186,7 +193,7 @@ function Chat() {
               Large Language Models no desenvolvimento de um chatbot para consultoria
               jurídico-trabalhista”.
             </Card.Text>
-            <Card.Text style={{ padding: ' 0 40px' }}>
+            <Card.Text style={{ padding: ' 0 40px', fontWeight: 'bold' }}>
               Esse chatbot está sujeito a erros e não substitui uma consultoria real com um
               advogado.
             </Card.Text>
