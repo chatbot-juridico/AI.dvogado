@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import api from '../../services/api';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
+import api from '../../services/api';
 import './Login.css';
 
 function Login() {
-  const [users, setUsers] = useState();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const [error, setError] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const loginData = {
-      username: username,
-      password: password,
+      username: usernameRef.current.value,
+      password: passwordRef.current.value,
     };
+
     await api
       .post('/api-auth/login/', loginData)
       .then((res) => {
@@ -36,49 +36,31 @@ function Login() {
       });
   };
 
-  const getUsers = () => {
-    api
-      .get('api/users/')
-      .then((response) => setUsers(response.data.results))
-      .catch((err) => {
-        console.error('Error:' + err);
-      });
-  };
-
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Usuário:</label>
-          <input
-            type='text'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Senha:</label>
-          <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type='submit'>Entrar</button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '100vh' }}>
+      <Card style={{ margin: '0 30%' }}>
+        <Card.Body>
+          <Card.Title>
+            <h1>Login</h1>
+          </Card.Title>
+          <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
+            <FloatingLabel label='Usuário' className='mb-3'>
+              <Form.Control ref={usernameRef} placeholder='usuário' required />
+            </FloatingLabel>
 
-      <h2>Usuários Cadastrados</h2>
-      {users?.map(function (d, idx) {
-        return (
-          <li key={idx}>
-            {d.username} - {d.password}
-          </li>
-        );
-      })}
+            <FloatingLabel label='Senha' className='mb-3'>
+              <Form.Control type='password' ref={passwordRef} placeholder='senha' required />
+            </FloatingLabel>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className='d-grid' style={{ marginBottom: '25px' }}>
+              <Button type='submit'>Entrar</Button>
+            </div>
+          </Form>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
+            <Button onClick={() => navigate('/sign-in')}>Criar conta</Button>
+          </div>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

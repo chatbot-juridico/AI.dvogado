@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import icon from '../assets/icons/icon.png';
 
 import './Header.css';
 
@@ -33,7 +34,7 @@ function Header() {
   return (
     <div id='header'>
       <div id='header-area' onClick={() => navigate('/')}>
-        <img id='logo' alt='Logo'></img>
+        <img id='logo' alt='Logo' src={icon}></img>
         <div id='header-title-area'>
           <h1 id='title'>Nome do Produto</h1>
           <p id='subtitle'>Seu assistente jurídico-trabalhista</p>
