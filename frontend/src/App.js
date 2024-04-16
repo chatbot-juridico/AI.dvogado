@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Login from './pages/Login/Login';
 import Chat from './pages/Chat/Chat';
 import About from './pages/About/About';
+import SignIn from './pages/SignIn/SignIn';
 
 import './App.css';
 
@@ -18,6 +19,7 @@ function App() {
           <Route path='/' element={<Chat />} />
           <Route path='/about' element={<About />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/sign-in' element={<SignIn />} />
         </Routes>
       </Router>
     </React.StrictMode>
