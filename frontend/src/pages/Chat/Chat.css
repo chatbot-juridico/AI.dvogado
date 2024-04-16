@@ -1,13 +1,7 @@
 #content {
+    width: 100%;
+    margin: 0 auto;
     padding: 30px;
-}
-
-.card-title {
-    text-align: center;
-}
-
-.card-text {
-    padding: 10px 20px;
 }
 
 .card-body {
@@ -18,14 +12,11 @@
     padding: 15px;
 }
 
-#card-chat {
-    background-color: #e9e9e9;
+.card-title {
+    text-align: center;
+    padding: 15px;
 }
 
-#card-chat-title {
-    background-color: #d2d2d2;
-}
-
-#card-about {
-    background-color: #25ACA4;
+.card-text {
+    padding: 10px 20px;
 }
