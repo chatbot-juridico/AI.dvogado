@@ -4,41 +4,87 @@ import axios from 'axios'; // TEMP
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import api from '../../services/api';
 import Button from 'react-bootstrap/Button';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Spinner from 'react-bootstrap/Spinner';
 
 import icon from '../../assets/icons/icon.png';
 import menu from '../../assets/icons/menu.png';
 import arrowForward from '../../assets/icons/arrow-forward.png';
 
+import api from '../../services/api';
 import './Chat.css';
 
 function Chat() {
-  const [messages, setMessages] = useState();
+  const [userId, setUserId] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [showChats, setShowChats] = useState(false);
+  const [currentChat, setCurrentChat] = useState();
   const [input, setInput] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const divRef = useRef();
 
+  const handleClose = () => setShowChats(false);
+  const handleShow = () => setShowChats(true);
+
   useEffect(() => {
-    getMessages();
+    getUserId();
   }, []);
 
-  const getMessages = () => {
-    api.get('api/chat/').then((response) => {
-      if (response.data.length == 0) return;
-      setMessages(response.data);
-      const lastMessage = response.data[response.data.length - 1];
+  useEffect(() => {
+    if (currentChat) {
+      if (currentChat.messages.length === 0) return;
+      const lastMessage = currentChat.messages[currentChat.messages.length - 1];
       if (lastMessage.user !== 1) {
         getBotAnswer(lastMessage.text);
       }
-      setTimeout(scrollDown, 100);
+    }
+  }, [currentChat]);
+
+  const getUserId = async () => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await api.post(`/api/user-details/`, { token });
+      const id = response.data.id;
+      setUserId(id);
+      getChats(id);
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  };
+
+  const getChats = (userId) => {
+    api.get(`api/chats-messages/?user_id=${userId}`).then((response) => {
+      setIsLoading(false);
+      setChats(response.data);
+      if (currentChat) {
+        const chat = response.data.find((chat) => chat.id === currentChat.id);
+        setCurrentChat(chat);
+        setTimeout(scrollDown, 100);
+      }
     });
   };
 
+  const selectChat = (id) => {
+    console.log(' > ', id);
+    handleClose();
+    const chat = chats.find((chat) => chat.id === id);
+    setCurrentChat(chat);
+    if (chat.messages.length === 0) return;
+    const lastMessage = chat.messages[chat.messages.length - 1];
+    if (lastMessage.user !== 1) {
+      getBotAnswer(lastMessage.text);
+    }
+    setTimeout(scrollDown, 100);
+  };
+
   const sendMessage = (message, user) => {
+    if (!currentChat) return;
     api
-      .post('api/chat/', { text: message, user })
+      .post('api/messages/', { chat: currentChat.id, content: message, user: user })
       .then(() => {
-        getMessages();
+        getChats(currentChat.user);
       })
       .catch((err) => {
         console.error('Error:' + err);
@@ -49,6 +95,7 @@ function Chat() {
   };
 
   const getBotAnswer = async (message) => {
+    setIsLoading(true);
     const options = {
       method: 'GET',
       url: 'https://famous-quotes4.p.rapidapi.com/random',
@@ -63,7 +110,9 @@ function Chat() {
     };
     try {
       const response = await axios.request(options);
-      sendMessage(response.data[0].text, 1);
+      const content = response.data[0].text;
+      const botId = 1;
+      sendMessage(content, botId);
     } catch (error) {
       console.error(error);
     }
@@ -82,6 +131,35 @@ function Chat() {
     div.scrollTop = div.scrollHeight + div.clientHeight;
   };
 
+  const createChat = (user) => {
+    api
+      .post('api/chats/', { title: 'Novo Chat', user: user })
+      .then((response) => {
+        getChats(userId);
+        setTimeout(selectChat(response.data.id), 1000);
+      })
+      .catch((err) => {
+        console.error('Error:' + err);
+      });
+  };
+
+  const deleteChats = () => {
+    for (let index = 0; index < chats.length; index++) {
+      const chat = chats[index];
+      api
+        .delete(`api/chats/${chat.id}`)
+        .then(() => {
+          if (index === chats.length - 1) {
+            createChat(userId);
+            setTimeout(getChats(userId), 100);
+          }
+        })
+        .catch((err) => {
+          console.error('Error:' + err);
+        });
+    }
+  };
+
   return (
     <Row id='content'>
       <Col lg={9} md={12}>
@@ -89,25 +167,77 @@ function Chat() {
           style={{
             padding: '25px',
             backgroundColor: 'rgb(73 211 168)',
-            height: '100%',
             gap: '25px',
           }}
         >
-          <Card style={{ height: '545px', maxHeight: '545px' }}>
+          <Offcanvas show={showChats} onHide={handleClose}>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Button
+              style={{ width: 'fit-content', marginLeft: '12px' }}
+              onClick={() => createChat(userId)}
+            >
+              + Nova Conversa
+            </Button>
+            <Offcanvas.Body>
+              <ListGroup>
+                {chats?.map(function (chat, idx) {
+                  return (
+                    <ListGroup.Item key={idx}>
+                      <Button variant='Link' onClick={() => selectChat(chat.id)}>
+                        {chat.title}
+                      </Button>
+                    </ListGroup.Item>
+                  );
+                })}
+              </ListGroup>
+
+              <div
+                style={{ position: 'absolute', bottom: '20px', width: '91%', textAlign: 'center' }}
+              >
+                <Button variant='danger' onClick={() => deleteChats()}>
+                  Excluir todas as conversas
+                </Button>
+              </div>
+            </Offcanvas.Body>
+          </Offcanvas>
+
+          <Card>
             <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
-              <Card.Title style={{ backgroundColor: '#D2D2D2', marginBottom: '0' }}>
-                Chat
+              <Card.Title
+                style={{
+                  backgroundColor: '#D2D2D2',
+                  marginBottom: '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Button variant='link' onClick={handleShow}>
+                  <img
+                    style={{
+                      width: '30px',
+                      height: '30px',
+                      transition: 'transform 0.3s ease-in-out',
+                    }}
+                    src={menu}
+                    alt='*'
+                  />
+                </Button>
+                <h2 style={{ marginBottom: 0 }}>Chat</h2>
+                <div style={{ width: '56px' }}></div>
               </Card.Title>
               <div
                 ref={divRef}
                 style={{
                   overflow: 'auto',
-                  height: '500px',
+                  height: '450px',
                   backgroundColor: '#FFF',
                   padding: '15px 0',
                 }}
               >
-                {messages?.map(function (message, idx) {
+                {currentChat?.messages?.map(function (message, idx) {
                   const isBot = message.user === 1;
                   return (
                     <Card.Text
@@ -122,10 +252,15 @@ function Chat() {
                       }}
                     >
                       <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
-                      <span>{message.text}</span>
+                      <span>{message.content}</span>
                     </Card.Text>
                   );
                 })}
+                {isLoading && (
+                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <Spinner animation='border' variant='primary' />
+                  </div>
+                )}
               </div>
             </Card.Body>
           </Card>
@@ -153,7 +288,7 @@ function Chat() {
                 <Button
                   as='a'
                   variant='success'
-                  onClick={() => sendMessage(input)}
+                  onClick={() => sendMessage(input, userId)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
