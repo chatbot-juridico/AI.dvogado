@@ -15,7 +15,7 @@ import menu from '../../assets/icons/menu.png';
 import arrowUp from '../../assets/icons/arrow-up.png';
 
 import api from '../../services/api';
-import './Chat.css';
+import './Chat.scss';
 
 function Chat() {
   const [userId, setUserId] = useState(null);
@@ -523,13 +523,14 @@ function Chat() {
       {/* SOBRE */}
       {!isExpanded ? (
         <Col lg={1} md={12}>
-          <Card>
+          <Card style={{ height: '75.5vh' }}>
             <Card.Body
               style={{
                 backgroundColor: 'rgb(73 211 168)',
                 padding: '10px 0',
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
               }}
             >
               <Button variant='link' onClick={toggleMenu}>
@@ -543,12 +544,32 @@ function Chat() {
                   alt='*'
                 ></img>
               </Button>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '50px',
+                  padding: '10px',
+                  paddingBottom: '40px',
+                }}
+              >
+                <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank'>
+                  Repo
+                </Button>
+                <Button
+                  as='a'
+                  href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'
+                  target='_blank'
+                >
+                  Art.
+                </Button>
+              </div>
             </Card.Body>
           </Card>
         </Col>
       ) : (
         <Col lg={3} md={12}>
-          <Card style={{ width: isExpanded ? 'auto' : '57px' }}>
+          <Card style={{ height: '75.5vh' }}>
             <Card.Body
               style={{
                 backgroundColor: 'rgb(73 211 168)',
@@ -581,15 +602,20 @@ function Chat() {
               <div
                 style={{
                   display: 'flex',
+                  flexDirection: 'column',
                   gap: '50px',
-                  justifyContent: 'center',
-                  marginBottom: '10px',
+                  padding: '0 50px',
+                  paddingBottom: '40px',
                 }}
               >
-                <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao'>
+                <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank'>
                   Repositório
                 </Button>
-                <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'>
+                <Button
+                  as='a'
+                  href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'
+                  target='_blank'
+                >
                   Artigo
                 </Button>
               </div>

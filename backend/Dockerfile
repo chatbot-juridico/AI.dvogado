@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Execute os comandos makemigrations, migrate e runserver
-CMD python chatbotApi/manage.py makemigrations && python chatbotApi/manage.py migrate &&  python chatbotApi/manage.py makemigrations chats && python chatbotApi/manage.py migrate chats && python chatbotApi/manage.py runserver 0.0.0.0:8000
+CMD python chatbotApi/manage.py makemigrations &&  python chatbotApi/manage.py makemigrations chats feedbacks && python chatbotApi/manage.py migrate && python chatbotApi/manage.py runserver 0.0.0.0:8000
