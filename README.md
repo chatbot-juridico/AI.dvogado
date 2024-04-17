@@ -26,3 +26,5 @@
    Nesse backup já tem um super usuário do Django.
 
 6. Ao manipular o banco de dados e desejar manter as alterações, faça o backup:
+
+   `docker exec -it Database bash backup/backup_data.sh`
