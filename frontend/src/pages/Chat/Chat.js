@@ -8,10 +8,11 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 import icon from '../../assets/icons/icon.png';
 import menu from '../../assets/icons/menu.png';
-import arrowForward from '../../assets/icons/arrow-forward.png';
+import arrowUp from '../../assets/icons/arrow-up.png';
 
 import api from '../../services/api';
 import './Chat.css';
@@ -24,13 +25,29 @@ function Chat() {
   const [input, setInput] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const divRef = useRef();
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const handleClose = () => setShowChats(false);
   const handleShow = () => setShowChats(true);
 
   useEffect(() => {
-    getUserId();
-  }, []);
+    if (!userId) {
+      getUserId();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (chats.length > 0) {
+      if (currentChat) {
+        const chat = chats.find((chat) => chat.id === currentChat.id);
+        setCurrentChat(chat);
+        setTimeout(scrollDown, 100);
+      } else {
+        const lastChat = chats[chats.length - 1];
+        setCurrentChat(lastChat);
+      }
+    }
+  }, [chats]);
 
   useEffect(() => {
     if (currentChat) {
@@ -42,49 +59,56 @@ function Chat() {
     }
   }, [currentChat]);
 
-  const getUserId = async () => {
+  const getUserId = () => {
     const token = localStorage.getItem('authToken');
-    try {
-      const response = await api.post(`/api/user-details/`, { token });
-      const id = response.data.id;
-      setUserId(id);
-      getChats(id);
-    } catch (err) {
-      console.error('Error:', err);
-    }
+    api
+      .post(`/api/user-details/`, { token })
+      .then((res) => {
+        const id = res.data.id;
+        setUserId(id);
+        getChats(id);
+      })
+      .catch((err) => {
+        console.error('Error:', err);
+      });
   };
 
-  const getChats = (userId) => {
-    api.get(`api/chats-messages/?user_id=${userId}`).then((response) => {
-      setIsLoading(false);
-      setChats(response.data);
-      if (currentChat) {
-        const chat = response.data.find((chat) => chat.id === currentChat.id);
-        setCurrentChat(chat);
-        setTimeout(scrollDown, 100);
-      }
-    });
+  const getChats = async (userId) => {
+    setIsLoading(true);
+    return await api
+      .get(`api/chats-messages/?user_id=${userId}`)
+      .then((res) => {
+        setChats(res.data);
+        setIsLoading(false);
+        return res.data;
+      })
+      .catch((err) => {
+        console.error('Erro: ', err);
+      });
   };
 
   const selectChat = (id) => {
-    console.log(' > ', id);
-    handleClose();
     const chat = chats.find((chat) => chat.id === id);
     setCurrentChat(chat);
-    if (chat.messages.length === 0) return;
-    const lastMessage = chat.messages[chat.messages.length - 1];
-    if (lastMessage.user !== 1) {
-      getBotAnswer(lastMessage.text);
-    }
+    handleClose();
     setTimeout(scrollDown, 100);
   };
 
   const sendMessage = (message, user) => {
-    if (!currentChat) return;
     api
       .post('api/messages/', { chat: currentChat.id, content: message, user: user })
       .then(() => {
-        getChats(currentChat.user);
+        const updatedChats = chats.map((chat) => {
+          if (chat.id === currentChat.id) {
+            return {
+              ...chat,
+              messages: [...chat.messages, { content: message, user: user }],
+            };
+          }
+          return chat;
+        });
+        setChats(updatedChats);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.error('Error:' + err);
@@ -124,6 +148,7 @@ function Chat() {
       parseInt(icon.style.transform.replace('rotate(', '').replace('deg)', ''), 10) || 0;
     currentRotation += 90;
     icon.style.transform = `rotate(${currentRotation}deg)`;
+    setIsExpanded(!isExpanded);
   };
 
   const scrollDown = () => {
@@ -133,224 +158,445 @@ function Chat() {
 
   const createChat = (user) => {
     api
-      .post('api/chats/', { title: 'Novo Chat', user: user })
-      .then((response) => {
-        getChats(userId);
-        setTimeout(selectChat(response.data.id), 1000);
+      .post('api/chats/', { title: `Novo Chat`, user: user })
+      .then(async (res) => {
+        const allChats = await getChats(userId);
+        const newChat = allChats.find((chat) => chat.id === res.data.id);
+        setCurrentChat(newChat);
       })
       .catch((err) => {
-        console.error('Error:' + err);
+        console.error('Erro: ', err);
       });
   };
 
-  const deleteChats = () => {
+  const deleteChats = (chatId) => {
+    const deleteAll = !chatId;
+
     for (let index = 0; index < chats.length; index++) {
       const chat = chats[index];
-      api
-        .delete(`api/chats/${chat.id}`)
-        .then(() => {
-          if (index === chats.length - 1) {
-            createChat(userId);
-            setTimeout(getChats(userId), 100);
-          }
-        })
-        .catch((err) => {
-          console.error('Error:' + err);
-        });
+      if (deleteAll || chat.id === chatId) {
+        api
+          .delete(`api/chats/${chat.id}`)
+          .then(async () => {
+            if ((index === chats.length - 1 && deleteAll) || (!deleteAll && chats.length === 1)) {
+              createChat(userId);
+              handleClose();
+            }
+            const allChats = await getChats(userId);
+            if (currentChat.id === chatId) {
+              const newCurrentChat = allChats[allChats.length - 1];
+              setCurrentChat(newCurrentChat);
+            }
+          })
+          .catch((err) => {
+            console.error('Error:' + err);
+          });
+      }
     }
   };
 
   return (
     <Row id='content'>
-      <Col lg={9} md={12}>
-        <Card
-          style={{
-            padding: '25px',
-            backgroundColor: 'rgb(73 211 168)',
-            gap: '25px',
-          }}
-        >
-          <Offcanvas show={showChats} onHide={handleClose}>
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
-            </Offcanvas.Header>
-            <Button
-              style={{ width: 'fit-content', marginLeft: '12px' }}
-              onClick={() => createChat(userId)}
-            >
-              + Nova Conversa
-            </Button>
-            <Offcanvas.Body>
-              <ListGroup>
-                {chats?.map(function (chat, idx) {
-                  return (
-                    <ListGroup.Item key={idx}>
-                      <Button variant='Link' onClick={() => selectChat(chat.id)}>
-                        {chat.title}
-                      </Button>
-                    </ListGroup.Item>
-                  );
-                })}
-              </ListGroup>
+      {/* CHAT */}
+      {!isExpanded ? (
+        <Col lg={11} md={12}>
+          <Card
+            style={{
+              padding: '25px',
+              backgroundColor: 'rgb(73 211 168)',
+              gap: '25px',
+            }}
+          >
+            <Offcanvas show={showChats} onHide={handleClose}>
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
+              </Offcanvas.Header>
+              <Button
+                style={{ width: 'fit-content', marginLeft: '12px' }}
+                onClick={() => createChat(userId)}
+              >
+                + Nova Conversa
+              </Button>
+              <hr></hr>
+              <Offcanvas.Body>
+                <ListGroup>
+                  {chats?.map(function (chat, idx) {
+                    return (
+                      <ListGroup.Item
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Button variant='Link' onClick={() => selectChat(chat.id)}>
+                          {chat.title}
+                        </Button>
+                        <CloseButton onClick={() => deleteChats(chat.id)} />
+                      </ListGroup.Item>
+                    );
+                  })}
+                </ListGroup>
 
-              <div
-                style={{ position: 'absolute', bottom: '20px', width: '91%', textAlign: 'center' }}
-              >
-                <Button variant='danger' onClick={() => deleteChats()}>
-                  Excluir todas as conversas
-                </Button>
-              </div>
-            </Offcanvas.Body>
-          </Offcanvas>
-
-          <Card>
-            <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
-              <Card.Title
-                style={{
-                  backgroundColor: '#D2D2D2',
-                  marginBottom: '0',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Button variant='link' onClick={handleShow}>
-                  <img
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      transition: 'transform 0.3s ease-in-out',
-                    }}
-                    src={menu}
-                    alt='*'
-                  />
-                </Button>
-                <h2 style={{ marginBottom: 0 }}>Chat</h2>
-                <div style={{ width: '56px' }}></div>
-              </Card.Title>
-              <div
-                ref={divRef}
-                style={{
-                  overflow: 'auto',
-                  height: '450px',
-                  backgroundColor: '#FFF',
-                  padding: '15px 0',
-                }}
-              >
-                {currentChat?.messages?.map(function (message, idx) {
-                  const isBot = message.user === 1;
-                  return (
-                    <Card.Text
-                      key={idx}
-                      style={{
-                        margin: isBot ? '10px 10px 10px 175px' : '10px 175px 10px 10px',
-                        padding: '10px',
-                        backgroundColor: isBot ? '#FFD700' : '#EEE',
-                        borderRadius: '15px',
-                        display: 'flex',
-                        gap: '15px',
-                      }}
-                    >
-                      <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
-                      <span>{message.content}</span>
-                    </Card.Text>
-                  );
-                })}
-                {isLoading && (
-                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                    <Spinner animation='border' variant='primary' />
-                  </div>
-                )}
-              </div>
-            </Card.Body>
-          </Card>
-
-          <Card>
-            <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                  margin: '25px 0',
-                }}
-              >
-                <textarea
-                  placeholder='Sua mensagem...'
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                <div
                   style={{
-                    width: '90%',
-                    padding: '10px',
-                    minHeight: '45px',
-                  }}
-                ></textarea>
-                <Button
-                  as='a'
-                  variant='success'
-                  onClick={() => sendMessage(input, userId)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '45px',
+                    position: 'absolute',
+                    bottom: '20px',
+                    width: '91%',
+                    textAlign: 'center',
                   }}
                 >
-                  <img
+                  <Button variant='danger' onClick={() => deleteChats()}>
+                    Excluir todas as conversas
+                  </Button>
+                </div>
+              </Offcanvas.Body>
+            </Offcanvas>
+
+            <Card>
+              <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+                <Card.Title
+                  style={{
+                    backgroundColor: '#D2D2D2',
+                    marginBottom: '0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Button variant='link' onClick={handleShow}>
+                    <img
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        transition: 'transform 0.3s ease-in-out',
+                      }}
+                      src={menu}
+                      alt='*'
+                    />
+                  </Button>
+                  <h2 style={{ marginBottom: 0 }}>Chat</h2>
+                  <div style={{ width: '56px' }}></div>
+                </Card.Title>
+                <div
+                  ref={divRef}
+                  style={{
+                    overflow: 'auto',
+                    height: '450px',
+                    backgroundColor: '#FFF',
+                    padding: '15px 0',
+                  }}
+                >
+                  {currentChat?.messages?.map(function (message, idx) {
+                    const isBot = message.user === 1;
+                    return (
+                      <Card.Text
+                        key={idx}
+                        style={{
+                          margin: isBot ? '10px 10px 10px 175px' : '10px 175px 10px 10px',
+                          padding: '10px',
+                          backgroundColor: isBot ? '#FFD700' : '#EEE',
+                          borderRadius: '15px',
+                          display: 'flex',
+                          gap: '15px',
+                        }}
+                      >
+                        <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
+                        <span>{message.content}</span>
+                      </Card.Text>
+                    );
+                  })}
+                  {isLoading && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                      <Spinner animation='border' variant='primary' />
+                    </div>
+                  )}
+                </div>
+              </Card.Body>
+            </Card>
+
+            <Card>
+              <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    margin: '25px 0',
+                  }}
+                >
+                  <textarea
+                    placeholder='Sua mensagem...'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
                     style={{
-                      width: '20px',
-                      height: '25px',
+                      width: '90%',
+                      padding: '10px',
+                      minHeight: '45px',
                     }}
-                    src={arrowForward}
-                    alt='->'
-                  ></img>
+                  ></textarea>
+                  <Button
+                    onClick={() => sendMessage(input, userId)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '45px',
+                    }}
+                  >
+                    <img
+                      style={{
+                        width: '20px',
+                        height: '25px',
+                      }}
+                      src={arrowUp}
+                      alt='->'
+                    ></img>
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Card>
+        </Col>
+      ) : (
+        <Col lg={9} md={12}>
+          <Card
+            style={{
+              padding: '25px',
+              backgroundColor: 'rgb(73 211 168)',
+              gap: '25px',
+            }}
+          >
+            <Offcanvas show={showChats} onHide={handleClose}>
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
+              </Offcanvas.Header>
+              <Button
+                style={{ width: 'fit-content', marginLeft: '12px' }}
+                onClick={() => createChat(userId)}
+              >
+                + Nova Conversa
+              </Button>
+              <hr></hr>
+              <Offcanvas.Body>
+                <ListGroup>
+                  {chats?.map(function (chat, idx) {
+                    return (
+                      <ListGroup.Item
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Button variant='Link' onClick={() => selectChat(chat.id)}>
+                          {chat.title}
+                        </Button>
+                        <CloseButton onClick={() => deleteChats(chat.id)} />
+                      </ListGroup.Item>
+                    );
+                  })}
+                </ListGroup>
+
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '20px',
+                    width: '91%',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Button variant='danger' onClick={() => deleteChats()}>
+                    Excluir todas as conversas
+                  </Button>
+                </div>
+              </Offcanvas.Body>
+            </Offcanvas>
+
+            <Card>
+              <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+                <Card.Title
+                  style={{
+                    backgroundColor: '#D2D2D2',
+                    marginBottom: '0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Button variant='link' onClick={handleShow}>
+                    <img
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        transition: 'transform 0.3s ease-in-out',
+                      }}
+                      src={menu}
+                      alt='*'
+                    />
+                  </Button>
+                  <h2 style={{ marginBottom: 0 }}>Chat</h2>
+                  <div style={{ width: '56px' }}></div>
+                </Card.Title>
+                <div
+                  ref={divRef}
+                  style={{
+                    overflow: 'auto',
+                    height: '450px',
+                    backgroundColor: '#FFF',
+                    padding: '15px 0',
+                  }}
+                >
+                  {currentChat?.messages?.map(function (message, idx) {
+                    const isBot = message.user === 1;
+                    return (
+                      <Card.Text
+                        key={idx}
+                        style={{
+                          margin: isBot ? '10px 10px 10px 175px' : '10px 175px 10px 10px',
+                          padding: '10px',
+                          backgroundColor: isBot ? '#FFD700' : '#EEE',
+                          borderRadius: '15px',
+                          display: 'flex',
+                          gap: '15px',
+                        }}
+                      >
+                        <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
+                        <span>{message.content}</span>
+                      </Card.Text>
+                    );
+                  })}
+                  {isLoading && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                      <Spinner animation='border' variant='primary' />
+                    </div>
+                  )}
+                </div>
+              </Card.Body>
+            </Card>
+
+            <Card>
+              <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    margin: '25px 0',
+                  }}
+                >
+                  <textarea
+                    placeholder='Sua mensagem...'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    style={{
+                      width: '90%',
+                      padding: '10px',
+                      minHeight: '45px',
+                    }}
+                  ></textarea>
+                  <Button
+                    onClick={() => sendMessage(input, userId)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '45px',
+                    }}
+                  >
+                    <img
+                      style={{
+                        width: '20px',
+                        height: '25px',
+                      }}
+                      src={arrowUp}
+                      alt='->'
+                    ></img>
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Card>
+        </Col>
+      )}
+
+      {/* SOBRE */}
+      {!isExpanded ? (
+        <Col lg={1} md={12}>
+          <Card>
+            <Card.Body
+              style={{
+                backgroundColor: 'rgb(73 211 168)',
+                padding: '10px 0',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Button variant='link' onClick={toggleMenu}>
+                <img
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    transition: 'transform 0.3s ease-in-out',
+                  }}
+                  src={menu}
+                  alt='*'
+                ></img>
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      ) : (
+        <Col lg={3} md={12}>
+          <Card style={{ width: isExpanded ? 'auto' : '57px' }}>
+            <Card.Body
+              style={{
+                backgroundColor: 'rgb(73 211 168)',
+                padding: '10px 0',
+              }}
+            >
+              <Button variant='link' onClick={toggleMenu}>
+                <img
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    transition: 'transform 0.3s ease-in-out',
+                  }}
+                  src={menu}
+                  alt='*'
+                ></img>
+              </Button>
+              <Card.Title>Sobre</Card.Title>
+              <Card.Text style={{ padding: ' 0 40px' }}>
+                Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por
+                graduandos da Faculdade do Gama da Universidade de Brasília, com o tema “Utilização
+                de Large Language Models no desenvolvimento de um chatbot para consultoria
+                jurídico-trabalhista”.
+              </Card.Text>
+              <Card.Text style={{ padding: ' 0 40px', fontWeight: 'bold' }}>
+                Esse chatbot está sujeito a erros e não substitui uma consultoria real com um
+                advogado.
+              </Card.Text>
+              <Card.Title>Links</Card.Title>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '50px',
+                  justifyContent: 'center',
+                  marginBottom: '10px',
+                }}
+              >
+                <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao'>
+                  Repositório
+                </Button>
+                <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'>
+                  Artigo
                 </Button>
               </div>
             </Card.Body>
           </Card>
-        </Card>
-      </Col>
-
-      <Col lg={3} md={12}>
-        <Card>
-          <Card.Body style={{ backgroundColor: 'rgb(73 211 168)', padding: '10px 0' }}>
-            <Button variant='link' onClick={($event) => toggleMenu($event)}>
-              <img
-                style={{ width: '30px', height: '30px', transition: 'transform 0.3s ease-in-out' }}
-                src={menu}
-                alt='*'
-              ></img>
-            </Button>
-
-            <Card.Title>Sobre</Card.Title>
-            <Card.Text style={{ padding: ' 0 40px' }}>
-              Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por
-              graduandos da Faculdade do Gama da Universidade de Brasília, com o tema “Utilização de
-              Large Language Models no desenvolvimento de um chatbot para consultoria
-              jurídico-trabalhista”.
-            </Card.Text>
-            <Card.Text style={{ padding: ' 0 40px', fontWeight: 'bold' }}>
-              Esse chatbot está sujeito a erros e não substitui uma consultoria real com um
-              advogado.
-            </Card.Text>
-            <Card.Title>Links</Card.Title>
-            <div
-              style={{
-                display: 'flex',
-                gap: '50px',
-                justifyContent: 'center',
-                marginBottom: '10px',
-              }}
-            >
-              <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao'>
-                Repositório
-              </Button>
-              <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'>
-                Artigo
-              </Button>
-            </div>
-          </Card.Body>
-        </Card>
-      </Col>
+        </Col>
+      )}
     </Row>
   );
 }

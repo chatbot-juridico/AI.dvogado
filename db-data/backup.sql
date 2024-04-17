@@ -492,8 +492,10 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$600000$E8MSwMsXXDEk7m0X0P1CQ1$Bx1M2laNfUXKcfI5Y8gfDgcpu+AudxKdrK1AgzPkP/U=	\N	f	BOT			bot@email.com	t	t	2024-04-16 22:54:10.786824+00
-2	pbkdf2_sha256$600000$6fZlT1KoTIN4FCEmYFNjI5$MttGJEutpfOQF1PYcD32rKRUpRRt5Tr566idBsYeegM=	\N	f	Admin			admin@email.com	t	t	2024-04-16 22:54:38.886992+00
+1	pbkdf2_sha256$600000$i45Rz8pCX3x4XapunN27Ya$glC9e52RGatX8bnUUS+ReBV12XrdP2SBEAHtKj/soJA=	\N	f	BOT			bot@email.com	t	t	2024-04-17 14:46:15.021723+00
+3	pbkdf2_sha256$600000$qm4aMD4P6OTVswsxLmycil$AGegqwjKE3OCtvtP5c9zxQL7oGV/D8lf/5ZnofWJR6s=	\N	f	Cleber			cleber@email.com	t	t	2024-04-17 15:14:12.277673+00
+4	pbkdf2_sha256$600000$XCtmSXQlD8T7ZEXsxUQluC$SDfwWOeBFggbkztOrIrfrAPwxAnAkexoinRvsz8CSzY=	\N	f	Julio			julinho@email.com	t	t	2024-04-17 15:18:10.768242+00
+2	pbkdf2_sha256$600000$AwTGbeRxpnUN1e5yNB1YH2$PLRFMOfZBLu0prCGvt+baFsm3ywq9KjgcKbhZzEBcGY=	\N	f	admin			admin@email.com	t	t	2024-04-17 14:46:29.080333+00
 \.
 
 
@@ -518,7 +520,9 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 --
 
 COPY public.authtoken_token (key, created, user_id) FROM stdin;
-1961e920c644f4e09978e3151b4a1e59fc76897a	2024-04-16 22:55:50.600545+00	2
+c592411a23494a212bd4d8da1314e49b0c7dd32a	2024-04-17 14:46:38.779982+00	2
+4b82c59f2a16c51f410c8b203d3d4ebf95b6533c	2024-04-17 15:14:28.078562+00	3
+7f0d7277769ac96d1a64d214d3c05709917389f3	2024-04-17 15:18:16.200921+00	4
 \.
 
 
@@ -527,7 +531,13 @@ COPY public.authtoken_token (key, created, user_id) FROM stdin;
 --
 
 COPY public.chats_chat (id, title, user_id) FROM stdin;
-18	Novo Chat	2
+9	Novo Chat 1	3
+13	Novo Chat 1	\N
+14	Novo Chat 1	\N
+17	Novo Chat 1	\N
+18	Novo Chat 1	\N
+25	Novo Chat 1	4
+55	Novo Chat	2
 \.
 
 
@@ -536,6 +546,8 @@ COPY public.chats_chat (id, title, user_id) FROM stdin;
 --
 
 COPY public.chats_message (id, content, chat_id, user_id) FROM stdin;
+3	Banana	55	2
+4	This was our last stop. This was it. We had those two embryos that we had banked prior to learning about the breast cancer, and with the medicine she was on, this was our last effort. The prayers were answered.	55	1
 \.
 
 
@@ -570,29 +582,29 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2024-04-16 22:53:39.292264+00
-2	auth	0001_initial	2024-04-16 22:53:39.390498+00
-3	admin	0001_initial	2024-04-16 22:53:39.415261+00
-4	admin	0002_logentry_remove_auto_add	2024-04-16 22:53:39.432641+00
-5	admin	0003_logentry_add_action_flag_choices	2024-04-16 22:53:39.451212+00
-6	contenttypes	0002_remove_content_type_name	2024-04-16 22:53:39.484654+00
-7	auth	0002_alter_permission_name_max_length	2024-04-16 22:53:39.502357+00
-8	auth	0003_alter_user_email_max_length	2024-04-16 22:53:39.514486+00
-9	auth	0004_alter_user_username_opts	2024-04-16 22:53:39.527933+00
-10	auth	0005_alter_user_last_login_null	2024-04-16 22:53:39.542821+00
-11	auth	0006_require_contenttypes_0002	2024-04-16 22:53:39.547014+00
-12	auth	0007_alter_validators_add_error_messages	2024-04-16 22:53:39.562424+00
-13	auth	0008_alter_user_username_max_length	2024-04-16 22:53:39.579869+00
-14	auth	0009_alter_user_last_name_max_length	2024-04-16 22:53:39.596014+00
-15	auth	0010_alter_group_name_max_length	2024-04-16 22:53:39.61151+00
-16	auth	0011_update_proxy_permissions	2024-04-16 22:53:39.6255+00
-17	auth	0012_alter_user_first_name_max_length	2024-04-16 22:53:39.639298+00
-18	authtoken	0001_initial	2024-04-16 22:53:39.665762+00
-19	authtoken	0002_auto_20160226_1747	2024-04-16 22:53:39.708866+00
-20	authtoken	0003_tokenproxy	2024-04-16 22:53:39.714051+00
-21	authtoken	0004_alter_tokenproxy_options	2024-04-16 22:53:39.722284+00
-22	sessions	0001_initial	2024-04-16 22:53:39.738302+00
-23	chats	0001_initial	2024-04-16 22:53:41.209446+00
+1	contenttypes	0001_initial	2024-04-17 14:40:18.115817+00
+2	auth	0001_initial	2024-04-17 14:40:18.178583+00
+3	admin	0001_initial	2024-04-17 14:40:18.198475+00
+4	admin	0002_logentry_remove_auto_add	2024-04-17 14:40:18.207746+00
+5	admin	0003_logentry_add_action_flag_choices	2024-04-17 14:40:18.219634+00
+6	contenttypes	0002_remove_content_type_name	2024-04-17 14:40:18.247572+00
+7	auth	0002_alter_permission_name_max_length	2024-04-17 14:40:18.263394+00
+8	auth	0003_alter_user_email_max_length	2024-04-17 14:40:18.277083+00
+9	auth	0004_alter_user_username_opts	2024-04-17 14:40:18.289013+00
+10	auth	0005_alter_user_last_login_null	2024-04-17 14:40:18.300865+00
+11	auth	0006_require_contenttypes_0002	2024-04-17 14:40:18.304481+00
+12	auth	0007_alter_validators_add_error_messages	2024-04-17 14:40:18.315602+00
+13	auth	0008_alter_user_username_max_length	2024-04-17 14:40:18.329536+00
+14	auth	0009_alter_user_last_name_max_length	2024-04-17 14:40:18.340537+00
+15	auth	0010_alter_group_name_max_length	2024-04-17 14:40:18.349052+00
+16	auth	0011_update_proxy_permissions	2024-04-17 14:40:18.358514+00
+17	auth	0012_alter_user_first_name_max_length	2024-04-17 14:40:18.370105+00
+18	authtoken	0001_initial	2024-04-17 14:40:18.391563+00
+19	authtoken	0002_auto_20160226_1747	2024-04-17 14:40:18.42063+00
+20	authtoken	0003_tokenproxy	2024-04-17 14:40:18.424587+00
+21	authtoken	0004_alter_tokenproxy_options	2024-04-17 14:40:18.431661+00
+22	chats	0001_initial	2024-04-17 14:40:18.47406+00
+23	sessions	0001_initial	2024-04-17 14:40:18.485491+00
 \.
 
 
@@ -636,7 +648,7 @@ SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_user_id_seq', 2, true);
+SELECT pg_catalog.setval('public.auth_user_id_seq', 4, true);
 
 
 --
@@ -650,14 +662,14 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: chats_chat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_chat_id_seq', 18, true);
+SELECT pg_catalog.setval('public.chats_chat_id_seq', 57, true);
 
 
 --
 -- Name: chats_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_message_id_seq', 49, true);
+SELECT pg_catalog.setval('public.chats_message_id_seq', 6, true);
 
 
 --

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 import logo from '../assets/icons/logo.png';
@@ -8,33 +8,18 @@ import './Header.css';
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const currentPath = useLocation().pathname;
   const navigate = useNavigate();
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
-    setIsLoggedIn(authToken ? true : false);
-  }, []);
-
-  const handleAboutClick = () => {
-    if (currentPath === '/') {
-      navigate('/about');
-    } else {
-      navigate('/');
-    }
-  };
+    setIsLoggedIn(!!authToken);
+  }, [localStorage.getItem('authToken')]);
 
   const handleLoginClick = () => {
     if (isLoggedIn) {
       localStorage.removeItem('authToken');
       setIsLoggedIn(false);
-    }
-    navigate('/login');
-  };
-
-  const handleProfileClick = () => {
-    if (isLoggedIn) {
-      navigate('/profile');
+      navigate('/login');
     }
   };
 
@@ -48,20 +33,43 @@ function Header() {
         </div>
       </div>
       <div id='header-btn-area'>
-        {isLoggedIn ? (
-          <Button as='a' variant='success' onClick={() => handleProfileClick()}>
-            Perfil
-          </Button>
-        ) : (
-          <></>
+        {!isLoggedIn && (
+          <>
+            <Button
+              variant='success'
+              onClick={() => {
+                navigate('/about');
+              }}
+            >
+              O Projeto
+            </Button>
+            <Button variant='success' onClick={() => navigate('/login')}>
+              Login
+            </Button>
+          </>
         )}
-
-        <Button as='a' variant='success' onClick={() => handleAboutClick()}>
-          {currentPath === '/' ? 'O Projeto' : 'Chat'}
-        </Button>
-        <Button as='a' variant='success' onClick={() => handleLoginClick()}>
-          {isLoggedIn ? 'Sair' : 'Login'}
-        </Button>
+        
+        {isLoggedIn && (
+          <>
+            <Button
+              variant='success'
+              onClick={() => {
+                navigate('/about');
+              }}
+            >
+              O Projeto
+            </Button>
+            <Button variant='success' onClick={() => navigate('/chat')}>
+              Chat
+            </Button>
+            <Button variant='success' onClick={() => navigate('/profile')}>
+              Perfil
+            </Button>
+            <Button variant='success' onClick={handleLoginClick}>
+              Sair
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

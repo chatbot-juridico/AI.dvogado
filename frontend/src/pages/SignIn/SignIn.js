@@ -39,7 +39,7 @@ function SignIn() {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '100vh' }}>
+    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
       <Card style={{ margin: '0 30%' }}>
         <Card.Body>
           <Card.Title>

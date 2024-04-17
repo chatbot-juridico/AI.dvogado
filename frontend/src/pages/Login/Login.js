@@ -28,7 +28,7 @@ function Login() {
       .then((res) => {
         const token = res.data.token;
         localStorage.setItem('authToken', token);
-        navigate('/');
+        navigate('/chat');
       })
       .catch((error) => {
         console.error('Ocorreu um erro: ', error);
@@ -37,7 +37,7 @@ function Login() {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '100vh' }}>
+    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
       <Card style={{ margin: '0 30%' }}>
         <Card.Body>
           <Card.Title>

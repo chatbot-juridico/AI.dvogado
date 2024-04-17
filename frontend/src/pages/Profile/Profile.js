@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 
 import SuccessModal from '../../components/SuccessModal';
 
-import message from '../../assets/icons/message.png';
+import person from '../../assets/icons/person.png';
 import api from '../../services/api';
 import './Profile.css';
 
@@ -24,7 +24,6 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('authToken')) navigate('/');
     getUserData();
   }, [navigate]);
 
@@ -91,11 +90,7 @@ function Profile() {
           </Card.Title>
           <div style={{ padding: '0 25px', display: 'flex' }}>
             <div>
-              <img
-                style={{ width: '300px', height: '300px', border: '1px solid blue' }}
-                src={message}
-                alt='*'
-              ></img>
+              <img style={{ width: '220px', height: '220px' }} src={person} alt='*'></img>
             </div>
 
             <div style={{ marginLeft: '25px' }}>

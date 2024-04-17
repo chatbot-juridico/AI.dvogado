@@ -20,3 +20,11 @@
 .card-text {
     padding: 10px 20px;
 }
+
+.chat-box {
+    display: none;
+}
+
+.chat-box.expanded {
+    display: block;
+}
