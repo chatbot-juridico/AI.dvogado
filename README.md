@@ -11,6 +11,7 @@
 3. Baixar o Docker [aqui](https://docs.docker.com/get-docker/)
 
 4. Na raiz do projeto, usar o docker compose para instanciar os containeres:
+
    `docker compose up`
 
    Frontend: [localhost:3000](localhost:3000)

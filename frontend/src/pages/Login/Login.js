@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import api from '../../services/api';
-import './Login.css';
 
 function Login() {
   const usernameRef = useRef();

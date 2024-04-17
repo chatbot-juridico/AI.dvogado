@@ -6,8 +6,6 @@ import message from '../../assets/icons/message.png';
 import waves from '../../assets/icons/waves.png';
 import justice from '../../assets/icons/justice.png';
 
-import './About.css';
-
 function About() {
   return (
     <Card style={{ padding: '25px', backgroundColor: 'rgb(73 211 168)', margin: '25px' }}>

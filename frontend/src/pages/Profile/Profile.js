@@ -10,7 +10,6 @@ import SuccessModal from '../../components/SuccessModal';
 
 import person from '../../assets/icons/person.png';
 import api from '../../services/api';
-import './Profile.css';
 
 function Profile() {
   const [userData, setUserData] = useState({
