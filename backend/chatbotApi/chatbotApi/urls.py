@@ -4,11 +4,13 @@ from rest_framework.authtoken.views import ObtainAuthToken
 
 from .views import UserDetailsView, UserViewSet
 from chats.views import ChatViewSet, MessageViewSet, AllChatsWithMessagesView
+from feedbacks.views import FeedbackViewSet
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
 router.register(r"chats", ChatViewSet)
 router.register(r"messages", MessageViewSet)
+router.register(r"feedbacks", FeedbackViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls)),

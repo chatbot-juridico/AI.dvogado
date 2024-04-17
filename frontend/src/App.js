@@ -8,28 +8,33 @@ import Chat from './pages/Chat/Chat';
 import About from './pages/About/About';
 import SignIn from './pages/SignIn/SignIn';
 import Profile from './pages/Profile/Profile';
+import Feedback from './pages/Feedback/Feedback';
+
+import PrivateRoutes from './components/PrivateRoutes';
 
 import background from './assets/images/not-found-background.jpg';
 
-import './App.css';
+import './App.scss';
+
 
 function App() {
   return (
-    <React.StrictMode>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path='/' element={<About />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/chat' element={<Chat />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/sign-in' element={<SignIn />} />
-          <Route path='/profile' element={<Profile />} />
+    <Router>
+      <Header />
+      <Routes>
+        <Route path='/' element={<About />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/sign-in' element={<SignIn />} />
+        <Route path='/feedback' element={<Feedback />} />
+        <Route path='*' element={<NotFound />} />
 
-          <Route path='*' element={<NotFound />} />
-        </Routes>
-      </Router>
-    </React.StrictMode>
+        <Route element={<PrivateRoutes />}>
+          <Route path='/chat' element={<Chat />} />
+          <Route path='/profile' element={<Profile />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
@@ -40,7 +45,7 @@ function NotFound() {
         backgroundImage: `url(${background})`, // Corrigido aqui
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '90vh',
+        height: '91.7vh',
         display: 'flex',
         justifyContent: 'center',
         textAlign: 'center',
