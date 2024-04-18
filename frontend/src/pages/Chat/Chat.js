@@ -14,6 +14,7 @@ import icon from '../../assets/icons/icon.png';
 import menu from '../../assets/icons/menu.png';
 import arrowUp from '../../assets/icons/arrow-up.png';
 import reload from '../../assets/icons/reload.png';
+import clipboard from '../../assets/icons/clipboard.png';
 
 import api from '../../services/api';
 import './Chat.scss';
@@ -27,6 +28,7 @@ function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const divRef = useRef();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [file, setFile] = useState(null);
 
   const handleClose = () => setShowChats(false);
   const handleShow = () => setShowChats(true);
@@ -217,6 +219,46 @@ function Chat() {
       });
   };
 
+  const copyToClipboard = async (message) => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+    } catch (error) {
+      console.error('Erro:', error);
+    }
+  };
+
+  const handleChangeFile = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const handleUploadFile = async () => {
+    if (file) {
+      const data = new FormData();
+      data.append('image', file);
+      // data.append('url', 'https://storage.googleapis.com/api4ai-static/samples/ocr-1.png');
+
+      const options = {
+        method: 'POST',
+        url: 'https://ocr43.p.rapidapi.com/v1/results',
+        headers: {
+          'X-RapidAPI-Key': '48969325c7msh182124cce3b96dap1c5a70jsn7bca8705e06e',
+          'X-RapidAPI-Host': 'ocr43.p.rapidapi.com',
+        },
+        data: data,
+      };
+
+      try {
+        const response = await axios.request(options);
+        console.log(response.data.results[0].entities[0].objects[0].entities[0].text);
+        const fileText = response.data.results[0].entities[0].objects[0].entities[0].text;
+        setInput(input + ' documento: ' + fileText);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <div style={{ backgroundColor: '#EFF', padding: '45px 0', height: '89vh' }}>
       <Row id='content'>
@@ -269,7 +311,7 @@ function Chat() {
             </Offcanvas.Body>
           </Offcanvas>
 
-          <Card style={{ height: '65.3vh' }}>
+          <Card style={{ height: '60.5vh' }}>
             <Card.Body style={{ height: '100%' }}>
               <Card.Title
                 style={{
@@ -325,11 +367,23 @@ function Chat() {
                         <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
                         <span>{message.content}</span>
                       </span>
-                      {isBot && isLastMessage && (
-                        <span style={{ display: 'flex', alignItems: 'flex-end' }}>
-                          <Button as='a' variant='Link' onClick={() => reloadAnswer(message)}>
-                            <img src={reload} alt='reload' style={{ height: '24px' }}></img>
+
+                      {isBot && (
+                        <span
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <Button as='a' variant='Link' onClick={() => copyToClipboard(message)}>
+                            <img src={clipboard} alt='copy' style={{ height: '24px' }}></img>
                           </Button>
+                          {isLastMessage && (
+                            <Button as='a' variant='Link' onClick={() => reloadAnswer(message)}>
+                              <img src={reload} alt='reload' style={{ height: '24px' }}></img>
+                            </Button>
+                          )}
                         </span>
                       )}
                     </Card.Text>
@@ -354,16 +408,26 @@ function Chat() {
                   margin: '25px 0',
                 }}
               >
-                <textarea
-                  placeholder='Sua mensagem...'
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  style={{
-                    width: '90%',
-                    padding: '10px',
-                    minHeight: '45px',
-                  }}
-                ></textarea>
+                <div style={{ width: '85%' }}>
+                  <textarea
+                    placeholder='Sua mensagem...'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      minHeight: '45px',
+                    }}
+                  ></textarea>
+                  <input
+                    type='file'
+                    style={{ width: '30%' }}
+                    accept='.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                    onChange={(event) => handleChangeFile(event)}
+                  />
+                  <Button onClick={() => handleUploadFile()}>Upload!</Button>
+                </div>
+
                 <Button
                   onClick={() => sendMessage(input, userId)}
                   disabled={isLoading}
@@ -371,11 +435,12 @@ function Chat() {
                     display: 'flex',
                     alignItems: 'center',
                     height: '45px',
+                    marginBottom: '47px',
                   }}
                 >
                   <img
                     style={{
-                      width: '20px',
+                      width: '25px',
                       height: '25px',
                     }}
                     src={arrowUp}
