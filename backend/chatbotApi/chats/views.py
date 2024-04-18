@@ -20,17 +20,20 @@ class AllChatsWithMessagesView(APIView):
     def get(self, request):
         user_id = request.query_params.get("user_id")
         chats = Chat.objects.filter(user_id=user_id)
-        serialized_data = []
+        serialized_chats = []
 
         for chat in chats:
-            chat_data = ChatSerializer(chat, context={"request": request}).data
-            messages = MessageSerializer(
-                chat.message_set.all(), many=True, context={"request": request}
-            ).data
-            chat_data["messages"] = [
-                {"id": msg["id"], "user": msg["user"], "content": msg["content"]}
-                for msg in messages
-            ]
-            serialized_data.append(chat_data)
+            serialized_chat = ChatSerializer(chat, context={"request": request}).data
+            messages = chat.message_set.all()
+            serialized_messages = []
 
-        return Response(serialized_data)
+            for message in messages:
+                serialized_message = MessageSerializer(
+                    message, context={"request": request}
+                ).data
+                serialized_messages.append(serialized_message)
+
+            serialized_chat["messages"] = serialized_messages
+            serialized_chats.append(serialized_chat)
+
+        return Response(serialized_chats)

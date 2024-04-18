@@ -14,9 +14,9 @@
 
    `docker compose up`
 
-   Frontend: [localhost:3000](localhost:3000)
+   Frontend: [localhost:3000](http://localhost:3000)
 
-   Backend: [localhost:8000/api](localhost:8000/api)
+   Backend: [localhost:8000/api](http://localhost:8000/api)
 
 5. Carregar backup do banco:
 

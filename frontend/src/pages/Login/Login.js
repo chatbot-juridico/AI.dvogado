@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Form from 'react-bootstrap/Form';
@@ -9,18 +9,22 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import api from '../../services/api';
 
 function Login() {
-  const usernameRef = useRef();
-  const passwordRef = useRef();
+  const [loginData, setLoginData] = useState({
+    username: '',
+    password: '',
+  });
   const [error, setError] = useState();
   const navigate = useNavigate();
 
+  const handleInputChange = (e, field) => {
+    setLoginData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const loginData = {
-      username: usernameRef.current.value,
-      password: passwordRef.current.value,
-    };
 
     await api
       .post('/api-auth/login/', loginData)
@@ -44,11 +48,26 @@ function Login() {
           </Card.Title>
           <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
             <FloatingLabel label='Usuário' className='mb-3'>
-              <Form.Control ref={usernameRef} placeholder='usuário' required />
+              <Form.Control
+                value={loginData.username}
+                onChange={(e) => {
+                  handleInputChange(e, 'username');
+                }}
+                placeholder='usuário'
+                required
+              />
             </FloatingLabel>
 
             <FloatingLabel label='Senha' className='mb-3'>
-              <Form.Control type='password' ref={passwordRef} placeholder='senha' required />
+              <Form.Control
+                type='password'
+                value={loginData.password}
+                onChange={(e) => {
+                  handleInputChange(e, 'password');
+                }}
+                placeholder='senha'
+                required
+              />
             </FloatingLabel>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className='d-grid' style={{ marginBottom: '25px' }}>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Form from 'react-bootstrap/Form';
@@ -9,26 +9,28 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import api from '../../services/api';
 
 function SignIn() {
-  const usernameRef = useRef();
-  const emailRef = useRef();
-  const isAdminRef = useRef();
-  const passwordRef = useRef();
+  const [signInData, setSignInData] = useState({
+    username: '',
+    email: '',
+    is_staff: false,
+    password: '',
+  });
   const [error, setError] = useState();
   const navigate = useNavigate();
+
+  const handleInputChange = (e, field) => {
+    setSignInData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const signInData = {
-      username: usernameRef.current.value,
-      email: emailRef.current.value,
-      is_staff: isAdminRef.current.value,
-      password: passwordRef.current.value,
-    };
-
     await api
       .post('/api/users/', signInData)
-      .then((res) => {
+      .then(() => {
         navigate('/login');
       })
       .catch((error) => {
@@ -46,16 +48,45 @@ function SignIn() {
           </Card.Title>
           <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
             <FloatingLabel label='Usuário' className='mb-3'>
-              <Form.Control ref={usernameRef} placeholder='usuário' required />
+              <Form.Control
+                value={signInData.username}
+                placeholder='usuário'
+                onChange={(e) => {
+                  handleInputChange(e, 'username');
+                }}
+                required
+              />
             </FloatingLabel>
             <FloatingLabel label='Email' className='mb-3'>
-              <Form.Control ref={emailRef} placeholder='email' required />
+              <Form.Control
+                value={signInData.email}
+                placeholder='email'
+                onChange={(e) => {
+                  handleInputChange(e, 'email');
+                }}
+                required
+              />
             </FloatingLabel>
             <Form.Group className='mb-3'>
-              <Form.Check type='checkbox' ref={isAdminRef} label={'É administrador?'} />
+              <Form.Check
+                type='checkbox'
+                value={signInData.is_staff}
+                label='É administrador?'
+                onChange={(e) => {
+                  handleInputChange(e, 'is_staff');
+                }}
+              />
             </Form.Group>
             <FloatingLabel label='Senha' className='mb-3'>
-              <Form.Control type='password' ref={passwordRef} placeholder='senha' required />
+              <Form.Control
+                type='password'
+                value={signInData.password}
+                placeholder='senha'
+                onChange={(e) => {
+                  handleInputChange(e, 'password');
+                }}
+                required
+              />
             </FloatingLabel>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className='d-grid' style={{ marginBottom: '25px' }}>
@@ -63,7 +94,9 @@ function SignIn() {
             </div>
           </Form>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
-            <Button variant='secondary' onClick={() => navigate('/login')}>Já tem uma conta?</Button>
+            <Button variant='secondary' onClick={() => navigate('/login')}>
+              Já tem uma conta?
+            </Button>
           </div>
         </Card.Body>
       </Card>

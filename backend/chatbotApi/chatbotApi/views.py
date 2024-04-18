@@ -27,15 +27,17 @@ class UserViewSet(viewsets.ModelViewSet):
 
         username = request.data.get("username")
         email = request.data.get("email")
+        is_staff = True if request.data.get("is_staff") else False
         password = request.data.get("password")
 
         if password:
             instance.set_password(password)
-
         if username:
             instance.username = username
         if email:
             instance.email = email
+        if is_staff != None:
+            instance.is_staff = is_staff
 
         instance.save()
         serializer = self.get_serializer(instance)

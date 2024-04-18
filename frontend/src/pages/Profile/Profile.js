@@ -81,9 +81,9 @@ function Profile() {
   };
 
   return (
-    <Card style={{ padding: '25px', backgroundColor: 'rgb(73 211 168)', margin: '25px 25%' }}>
-      <Card>
-        <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
+      <Card style={{ margin: '0 30%' }}>
+        <Card.Body>
           <Card.Title>
             <h1>Perfil</h1>
           </Card.Title>
@@ -92,7 +92,7 @@ function Profile() {
               <img style={{ width: '220px', height: '220px' }} src={person} alt='*'></img>
             </div>
 
-            <div style={{ marginLeft: '25px' }}>
+            <div style={{ marginLeft: '25px', width: '100%' }}>
               <Form style={{ margin: '0 50px' }}>
                 <FloatingLabel label='Usuário' className='mb-3'>
                   <Form.Control
@@ -147,7 +147,7 @@ function Profile() {
         </Card.Body>
       </Card>
       <SuccessModal show={showSuccessModal} handleClose={handleCloseSuccessModal} />
-    </Card>
+    </div>
   );
 }
 

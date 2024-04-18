@@ -8,9 +8,9 @@ import justice from '../../assets/icons/justice.png';
 
 function About() {
   return (
-    <Card style={{ padding: '25px', backgroundColor: 'rgb(73 211 168)', margin: '25px' }}>
-      <Card>
-        <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
+      <Card style={{ margin: '0 15%' }}>
+        <Card.Body>
           <Card.Title>
             <h1>O Projeto</h1>
           </Card.Title>
@@ -54,7 +54,7 @@ function About() {
           </div>
         </Card.Body>
       </Card>
-    </Card>
+    </div>
   );
 }
 
