@@ -260,14 +260,11 @@ function Chat() {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '45px 0', height: '89vh' }}>
-      <Row id='content'>
+    <div className='chat-container'>
+      <Row className='content'>
         {/* CHAT */}
-        <Col
-          lg={isExpanded ? 9 : 11}
-          md={12}
-          style={{ display: 'flex', gap: '30px', flexDirection: 'column' }}
-        >
+        <Col lg={isExpanded ? 9 : 11} md={12} className='chat-column'>
+          {/* CHATS */}
           <Offcanvas show={showChats} onHide={handleClose}>
             <Offcanvas.Header closeButton>
               <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
@@ -315,77 +312,49 @@ function Chat() {
             </Offcanvas.Body>
           </Offcanvas>
 
-          <Card style={{ height: '60.5vh' }}>
-            <Card.Body style={{ height: '100%' }}>
-              <Card.Title
-                style={{
-                  backgroundColor: 'rgb(73 211 168)',
-                  marginBottom: '0',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+          {/* MESSAGES */}
+          <Card>
+            <Card.Body>
+              <Card.Title className='chat-title'>
                 <Button variant='link' onClick={handleShow}>
                   <img
                     style={{
                       width: '30px',
                       height: '30px',
-                      transition: 'transform 0.3s ease-in-out',
                     }}
                     src={menu}
-                    alt='*'
+                    alt='='
                   />
                 </Button>
-                <h2 style={{ marginBottom: 0 }}>
-                  {currentChat?.title ? currentChat?.title : 'Chat'}
-                </h2>
+                <h2>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
                 <div style={{ width: '56px' }}></div>
               </Card.Title>
-              <div
-                ref={divRef}
-                style={{
-                  overflow: 'auto',
-                  height: '88%',
-                  backgroundColor: '#FFF',
-                  padding: '15px 0',
-                }}
-              >
+              <div ref={divRef} className='messages-container'>
                 {currentChat?.messages?.map(function (message, idx) {
                   const isBot = message.user === 1;
                   const isLastMessage = idx === currentChat?.messages?.length - 1;
                   return (
                     <Card.Text
                       key={idx}
+                      className='message-box'
                       style={{
                         margin: isBot ? '10px 10px 10px 175px' : '10px 175px 10px 10px',
-                        padding: '10px',
                         backgroundColor: isBot ? '#FFD700' : '#EEE',
-                        borderRadius: '15px',
-                        display: 'flex',
-                        gap: '10px',
-                        justifyContent: 'space-between',
                       }}
                     >
-                      <span style={{ display: 'flex', gap: '15px' }}>
-                        <img style={{ width: '45px', height: '45px' }} src={icon} alt='*'></img>
+                      <span className='message-content'>
+                        <img className='hide-icon' src={icon} alt='*'></img>
                         <span>{message.content}</span>
                       </span>
 
                       {isBot && (
-                        <span
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-end',
-                          }}
-                        >
+                        <span className='message-actions'>
                           <Button as='a' variant='Link' onClick={() => copyToClipboard(message)}>
-                            <img src={clipboard} alt='copy' style={{ height: '24px' }}></img>
+                            <img src={clipboard} alt='copy' style={{ height: '16px' }}></img>
                           </Button>
                           {isLastMessage && (
                             <Button as='a' variant='Link' onClick={() => reloadAnswer(message)}>
-                              <img src={reload} alt='reload' style={{ height: '24px' }}></img>
+                              <img src={reload} alt='reload' style={{ height: '16px' }}></img>
                             </Button>
                           )}
                         </span>
@@ -394,53 +363,39 @@ function Chat() {
                   );
                 })}
                 {isLoading && (
-                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                    <Spinner animation='border' variant='primary' />
+                  <div className='loading'>
+                    <Spinner animation='border' />
                   </div>
                 )}
               </div>
             </Card.Body>
           </Card>
 
-          <Card>
-            <Card.Body style={{ backgroundColor: 'rgb(73 211 168)' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                  margin: '25px 0',
-                }}
-              >
-                <div style={{ width: '85%' }}>
+          {/* INPUT */}
+          <Card className='input-container'>
+            <Card.Body>
+              <div className='input-content'>
+                <div style={{ display: 'flex', width: '85%' }}>
                   <textarea
                     placeholder='Sua mensagem...'
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      minHeight: '45px',
-                    }}
+                    rows={2}
                   ></textarea>
-                  <input
+                  {/* <input
                     type='file'
                     style={{ width: '30%' }}
                     accept='.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     onChange={(event) => handleChangeFile(event)}
                   />
-                  <Button onClick={() => handleUploadFile()}>Upload!</Button>
+                  <Button onClick={() => handleUploadFile()}>Upload</Button> */}
                 </div>
 
                 <Button
                   onClick={() => sendMessage(input, userId)}
                   disabled={isLoading}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '45px',
-                    marginBottom: '47px',
-                  }}
+                  className='send-message-button'
+                  style={{}}
                 >
                   <img
                     style={{
@@ -448,7 +403,7 @@ function Chat() {
                       height: '25px',
                     }}
                     src={arrowUp}
-                    alt='->'
+                    alt='^'
                   ></img>
                 </Button>
               </div>
@@ -459,62 +414,66 @@ function Chat() {
         {/* SOBRE */}
         {isExpanded && (
           <Col lg={3} md={12}>
-            <Card style={{ height: '78vh', backgroundColor: 'rgb(73 211 168)' }}>
+            <Card className='about-card'>
               <Card.Body
                 style={{
-                  padding: '10px 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
                 }}
               >
-                <Button variant='link' onClick={toggleMenu}>
-                  <img
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      transition: 'transform 0.3s ease-in-out',
-                    }}
-                    src={menu}
-                    alt='*'
-                  ></img>
-                </Button>
-                <Card.Title>
-                  <h2>Sobre</h2>
-                </Card.Title>
-                <Card.Text style={{ padding: ' 0 40px' }}>
-                  Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por
-                  graduandos da Faculdade do Gama da Universidade de Brasília, com o tema
-                  “Utilização de Large Language Models no desenvolvimento de um chatbot para
-                  consultoria jurídico-trabalhista”.
-                </Card.Text>
-                <Card.Text style={{ padding: ' 0 40px', fontWeight: 'bold' }}>
-                  Esse chatbot está sujeito a erros e não substitui uma consultoria real com um
-                  advogado.
-                </Card.Text>
-                <Card.Title>
-                  <h3>Links</h3>
-                </Card.Title>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '50px',
-                    padding: '0 50px',
-                    paddingBottom: '40px',
-                  }}
-                >
-                  <Button
-                    as='a'
-                    href='https://github.com/chatbot-juridico/Aplicacao'
-                    target='_blank'
-                  >
-                    Repositório
+                <div>
+                  <Button variant='link' onClick={toggleMenu}>
+                    <img
+                    className='about-menu-icon'
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        transition: 'transform 0.3s ease-in-out',
+                      }}
+                      src={menu}
+                      alt='*'
+                    ></img>
                   </Button>
-                  <Button
-                    as='a'
-                    href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'
-                    target='_blank'
+                  <Card.Title className='about-subtitle'>
+                    <h2>Sobre</h2>
+                  </Card.Title>
+                  <Card.Text className='about-text'>
+                    Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por
+                    graduandos da Faculdade do Gama da Universidade de Brasília, com o tema
+                    “Utilização de Large Language Models no desenvolvimento de um chatbot para
+                    consultoria jurídico-trabalhista”.
+                  </Card.Text>
+                  <Card.Text
+                    className='about-text'
+                    style={{ fontWeight: 'bold', marginTop: '10%' }}
                   >
-                    Artigo
-                  </Button>
+                    Esse chatbot está sujeito a erros e não substitui uma consultoria real com um
+                    advogado.
+                  </Card.Text>
+                </div>
+                <div>
+                  <Card.Title className='about-subtitle'>
+                    <h3>Links</h3>
+                  </Card.Title>
+                  <div className='buttons-area'>
+                    <Button
+                      as='a'
+                      href='https://github.com/chatbot-juridico/Aplicacao'
+                      target='_blank'
+                      style={{ width: '65%' }}
+                    >
+                      Repositório
+                    </Button>
+                    <Button
+                      as='a'
+                      href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'
+                      target='_blank'
+                      style={{ width: '65%' }}
+                    >
+                      Artigo
+                    </Button>
+                  </div>
                 </div>
               </Card.Body>
             </Card>
@@ -523,7 +482,7 @@ function Chat() {
 
         {!isExpanded && (
           <Col lg={1} md={12}>
-            <Card style={{ height: '78vh', backgroundColor: 'rgb(73 211 168)' }}>
+            <Card className='about-card'>
               <Card.Body
                 style={{
                   padding: '10px 0',
@@ -540,18 +499,10 @@ function Chat() {
                       transition: 'transform 0.3s ease-in-out',
                     }}
                     src={menu}
-                    alt='*'
+                    alt='='
                   ></img>
                 </Button>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '50px',
-                    padding: '10px',
-                    paddingBottom: '40px',
-                  }}
-                >
+                <div className='buttons-area'>
                   <Button
                     as='a'
                     href='https://github.com/chatbot-juridico/Aplicacao'

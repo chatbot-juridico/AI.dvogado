@@ -1,5 +1,9 @@
-#content {
-    width: 100%;
+.chat-container {
+    background-color: #EFF;
+    height: 90vh;
+}
+
+.content {
     margin: 0 auto;
     padding: 30px;
 }
@@ -8,23 +12,154 @@
     padding: 0;
 }
 
-.card-body-padding {
-    padding: 15px;
+.chat-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.card-title {
-    text-align: center;
-    padding: 15px;
+.chat-title {
+    background-color: rgb(73 211 168);
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.card-text {
-    padding: 10px 20px;
+.chat-title h2 {
+    margin-bottom: 0;
 }
 
-.chat-box {
-    display: none;
+.messages-container {
+    overflow: auto;
+    background-color: #FFF;
+    height: 63vh;
 }
 
-.chat-box.expanded {
-    display: block;
+.message-box {
+    margin: 10px 175px 10px 10px;
+    padding: 10px;
+    background-color: #EEE;
+    border-radius: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.message-content {
+    display: flex;
+    gap: 15px
+}
+
+.message-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.input-container {
+    background-color: rgb(73 211 168);
+}
+
+.input-content {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px;
+    align-items: center;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.send-message-button {
+    display: flex;
+    align-items: center;
+    height: 45px;
+}
+
+.about-card {
+    height: 78vh;
+    background-color: rgb(73 211 168);
+}
+
+.about-subtitle {
+    display: flex;
+    justify-content: center;
+}
+
+.about-text {
+    padding: 0 40px;
+}
+
+.buttons-area {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 10px 40px 10px;
+}
+
+.hide-icon {
+    height: 45px;
+    width: 45px;
+}
+
+@media screen and (max-width: 1162px) {
+    .about-card {
+        height: 98vh;
+        transition: 0.3s all;
+    }
+
+    .messages-container {
+        height: 83vh;
+        transition: 0.3s all;
+    }
+
+    .about-menu-icon {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    .row {
+        padding: 30px 0;
+    }
+
+    .about-card {
+        height: fit-content;
+        transition: 0.3s all;
+        margin: 30px 3% !important;
+    }
+
+    .about-subtitle {
+        margin-top: 15px;
+    }
+
+    .about-text {
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .message-box {
+        margin: 10px !important;
+        font-size: 14px;
+    }
+
+    .hide-icon {
+        display: none;
+    }
+
+    .chat-title h2 {
+        font-size: 20px;
+    }
 }
