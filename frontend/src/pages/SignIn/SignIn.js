@@ -8,7 +8,10 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import api from '../../services/api';
 
+import './SignIn.css';
+
 function SignIn() {
+  const navigate = useNavigate();
   const [signInData, setSignInData] = useState({
     username: '',
     email: '',
@@ -16,7 +19,6 @@ function SignIn() {
     password: '',
   });
   const [error, setError] = useState();
-  const navigate = useNavigate();
 
   const handleInputChange = (e, field) => {
     setSignInData((prevState) => ({
@@ -40,14 +42,14 @@ function SignIn() {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
-      <Card style={{ margin: '0 30%' }}>
+    <div className='signin-container'>
+      <Card className='card-container'>
         <Card.Body>
-          <Card.Title>
+          <Card.Title className='title'>
             <h1>Cadastro</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
-            <FloatingLabel label='Usuário' className='mb-3'>
+          <Form onSubmit={handleSubmit} className='form'>
+            <FloatingLabel label='Usuário' className='form-input'>
               <Form.Control
                 value={signInData.username}
                 placeholder='usuário'
@@ -57,7 +59,7 @@ function SignIn() {
                 required
               />
             </FloatingLabel>
-            <FloatingLabel label='Email' className='mb-3'>
+            <FloatingLabel label='Email' className='form-input'>
               <Form.Control
                 value={signInData.email}
                 placeholder='email'
@@ -67,7 +69,7 @@ function SignIn() {
                 required
               />
             </FloatingLabel>
-            <Form.Group className='mb-3'>
+            <Form.Group className='form-input'>
               <Form.Check
                 type='checkbox'
                 value={signInData.is_staff}
@@ -77,7 +79,7 @@ function SignIn() {
                 }}
               />
             </Form.Group>
-            <FloatingLabel label='Senha' className='mb-3'>
+            <FloatingLabel label='Senha' className='form-input'>
               <Form.Control
                 type='password'
                 value={signInData.password}
@@ -88,12 +90,12 @@ function SignIn() {
                 required
               />
             </FloatingLabel>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className='d-grid' style={{ marginBottom: '25px' }}>
+            {error && <p className='error-message'>{error}</p>}
+            <div className='submit-button'>
               <Button type='submit'>Criar Conta</Button>
             </div>
           </Form>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
+          <div className='have-account'>
             <Button variant='secondary' onClick={() => navigate('/login')}>
               Já tem uma conta?
             </Button>

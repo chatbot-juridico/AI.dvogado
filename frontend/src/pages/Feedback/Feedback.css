@@ -1,0 +1,66 @@
+.feedback-container {
+    background-color: #EFF;
+    padding: 100px 0 20px;
+    min-height: 92vh;
+}
+
+.card-container {
+    margin: 0 30%;
+}
+
+.title {
+    text-align: center;
+}
+
+.form {
+    margin: 0 50px;
+}
+
+.form-input {
+    margin-bottom: 1.5rem;
+}
+
+.form-input input {
+    font-size: 20px;
+}
+
+.error-message {
+    color: red;
+}
+
+.submit-button {
+    margin-bottom: 25px;
+}
+
+.submit-button button {
+    min-width: 200px;
+    font-size: 20px;
+}
+
+.feedback-list {
+    margin: 50px 10%;
+}
+
+@media screen and (max-width: 990px) {
+    .card-container {
+        transition: 0.3s all;
+        margin: 0 10%;
+    }
+}
+
+@media screen and (max-width: 609px) {
+    .feedback-container {
+        transition: 0.3s all;
+        padding: 25px 0;
+    }
+
+    .card-container {
+        transition: 0.3s all;
+        margin: 0 3%;
+    }
+
+    .feedback-list {
+        transition: 0.3s all;
+        margin: 50px 3%;
+    }
+}

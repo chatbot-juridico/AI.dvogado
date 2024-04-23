@@ -45,9 +45,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class UserDetailsView(viewsets.ViewSet):
-    @action(detail=False, methods=["post"])
+    @action(detail=False, methods=["get"])
     def user_details(self, request):
-        auth_token = request.data.get("token", None)
+        auth_token = request.query_params.get("token", None)
 
         if not auth_token:
             return Response(

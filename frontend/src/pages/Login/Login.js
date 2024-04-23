@@ -8,13 +8,15 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import api from '../../services/api';
 
+import './Login.css';
+
 function Login() {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: '',
     password: '',
   });
   const [error, setError] = useState();
-  const navigate = useNavigate();
 
   const handleInputChange = (e, field) => {
     setLoginData((prevState) => ({
@@ -40,14 +42,14 @@ function Login() {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
-      <Card style={{ margin: '0 30%' }}>
+    <div className='login-container'>
+      <Card className='card-container'>
         <Card.Body>
-          <Card.Title>
+          <Card.Title className='title'>
             <h1>Login</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
-            <FloatingLabel label='Usuário' className='mb-3'>
+          <Form onSubmit={handleSubmit} className='form'>
+            <FloatingLabel label='Usuário' className='form-input'>
               <Form.Control
                 value={loginData.username}
                 onChange={(e) => {
@@ -58,7 +60,7 @@ function Login() {
               />
             </FloatingLabel>
 
-            <FloatingLabel label='Senha' className='mb-3'>
+            <FloatingLabel label='Senha' className='form-input'>
               <Form.Control
                 type='password'
                 value={loginData.password}
@@ -69,13 +71,15 @@ function Login() {
                 required
               />
             </FloatingLabel>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className='d-grid' style={{ marginBottom: '25px' }}>
+            {error && <p className='error-message'>{error}</p>}
+            <div className='submit-button'>
               <Button type='submit'>Entrar</Button>
             </div>
           </Form>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
-            <Button onClick={() => navigate('/sign-in')}>Criar conta</Button>
+          <div className='create-account'>
+            <Button variant='secondary' onClick={() => navigate('/sign-in')}>
+              Criar conta
+            </Button>
           </div>
         </Card.Body>
       </Card>

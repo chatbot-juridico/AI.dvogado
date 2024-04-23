@@ -17,7 +17,7 @@ import reload from '../../assets/icons/reload.png';
 import clipboard from '../../assets/icons/clipboard.png';
 
 import api from '../../services/api';
-import './Chat.scss';
+import './Chat.css';
 
 function Chat() {
   const [userId, setUserId] = useState(null);
@@ -37,7 +37,7 @@ function Chat() {
     const getUserId = () => {
       const token = localStorage.getItem('authToken');
       api
-        .post(`/api/user-details/`, { token })
+        .get(`/api/user-details/?token=${token}`)
         .then((res) => {
           const id = res.data.id;
           setUserId(id);
@@ -263,7 +263,11 @@ function Chat() {
     <div style={{ backgroundColor: '#EFF', padding: '45px 0', height: '89vh' }}>
       <Row id='content'>
         {/* CHAT */}
-        <Col lg={isExpanded ? 9 : 11} md={12}>
+        <Col
+          lg={isExpanded ? 9 : 11}
+          md={12}
+          style={{ display: 'flex', gap: '30px', flexDirection: 'column' }}
+        >
           <Offcanvas show={showChats} onHide={handleClose}>
             <Offcanvas.Header closeButton>
               <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
@@ -274,7 +278,7 @@ function Chat() {
             >
               + Nova Conversa
             </Button>
-            <hr></hr>
+            <hr />
             <Offcanvas.Body>
               <ListGroup>
                 {chats?.map(function (chat, idx) {

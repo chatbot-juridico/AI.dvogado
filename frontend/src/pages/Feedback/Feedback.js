@@ -8,6 +8,8 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import api from '../../services/api';
 
+import './Feedback.css';
+
 function Feedback() {
   const [feedbackData, setFeedbackData] = useState({
     email: '',
@@ -20,7 +22,7 @@ function Feedback() {
     const getUserData = async () => {
       const token = localStorage.getItem('authToken');
       try {
-        const response = await api.post(`/api/user-details/`, { token });
+        const response = await api.get(`/api/user-details/?token=${token}`);
         const isAdmin = response.data.is_staff;
         if (isAdmin) {
           getFeedbacks();
@@ -35,6 +37,13 @@ function Feedback() {
     }
   }, []);
 
+  const handleChange = (e, field) => {
+    setFeedbackData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
+
   const getFeedbacks = async () => {
     await api
       .get(`api/feedbacks/`)
@@ -46,62 +55,53 @@ function Feedback() {
       });
   };
 
-  const handleInputChange = (e, field) => {
-    setFeedbackData((prevState) => ({
-      ...prevState,
-      [field]: e.target.value,
-    }));
-  };
-
   const handleSubmit = async () => {
-    await api
-      .post('/api/feedbacks/', feedbackData)
-      .then(() => {
-        setFeedbackData({
-          email: '',
-          content: '',
-        });
-      })
-      .catch((error) => {
-        console.error('Ocorreu um erro: ', error);
-        setError('Erro:', error);
+    try {
+      await api.post('/api/feedbacks/', feedbackData);
+      setFeedbackData({
+        email: '',
+        content: '',
       });
+    } catch (error) {
+      console.error('Ocorreu um erro: ', error);
+      setError('Erro:', error);
+    }
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '50px 0', minHeight: '89vh' }}>
-      <Card style={{ margin: '0 30%' }}>
+    <div className="feedback-container">
+      <Card className="card-container">
         <Card.Body>
-          <Card.Title>
+          <Card.Title className="title">
             <h1>Enviar Feedback</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
-            <FloatingLabel label='Email' className='mb-3'>
+          <Form onSubmit={handleSubmit} className="form">
+            <FloatingLabel label='Email' className='form-input'>
               <Form.Control
                 type='email'
                 value={feedbackData.email}
                 onChange={(e) => {
-                  handleInputChange(e, 'email');
+                  handleChange(e, 'email');
                 }}
                 placeholder='email'
                 required
               />
             </FloatingLabel>
 
-            <FloatingLabel label='Mensagem' className='mb-3'>
+            <FloatingLabel label='Mensagem' className='form-input'>
               <Form.Control
                 style={{ height: '200px' }}
                 as='textarea'
                 value={feedbackData.content}
                 onChange={(e) => {
-                  handleInputChange(e, 'content');
+                  handleChange(e, 'content');
                 }}
                 placeholder='sua mensagem'
                 required
               />
             </FloatingLabel>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className='d-grid' style={{ marginBottom: '25px' }}>
+            {error && <p className="error-message">{error}</p>}
+            <div className='submit-button'>
               <Button type='submit'>Enviar Feedback</Button>
             </div>
           </Form>
@@ -110,9 +110,9 @@ function Feedback() {
 
       {/* Feedback list */}
       {feedbacks?.length > 0 && (
-        <Card style={{ margin: '50px 10%' }}>
+        <Card className="feedback-list">
           <Card.Body>
-            <Card.Title>
+            <Card.Title className="title">
               <h1>Feedbacks</h1>
             </Card.Title>
             <ListGroup variant='flush'>

@@ -5,13 +5,15 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-
 import SuccessModal from '../../components/SuccessModal';
-
 import person from '../../assets/icons/person.png';
+
 import api from '../../services/api';
 
+import './Profile.css';
+
 function Profile() {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     id: '',
     username: '',
@@ -20,21 +22,28 @@ function Profile() {
   });
   const [error, setError] = useState();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    getUserData();
-  }, [navigate]);
+    const getUserData = async () => {
+      const token = localStorage.getItem('authToken');
+      try {
+        const response = await api.get(`/api/user-details/?token=${token}`);
+        const user = response.data;
+        setUserData({ id: user.id, username: user.username, email: user.email, password: '' });
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    };
 
-  const getUserData = async () => {
-    const token = localStorage.getItem('authToken');
-    try {
-      const response = await api.post(`/api/user-details/`, { token });
-      const user = response.data;
-      setUserData({ id: user.id, username: user.username, email: user.email, password: '' });
-    } catch (err) {
-      console.error('Error:', err);
-    }
+    getUserData();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleDelete = async () => {
@@ -53,7 +62,6 @@ function Profile() {
       username: userData.username,
       email: userData.email,
     };
-
     if (userData.password) {
       editUserData.password = userData.password;
     }
@@ -67,33 +75,29 @@ function Profile() {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const handleCloseSuccessModal = () => {
     setShowSuccessModal(false);
     navigate('/');
   };
 
+  const disableSubmit = () => {
+    return !userData.username.trim() || !userData.email.trim();
+  };
+
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
-      <Card style={{ margin: '0 30%' }}>
+    <div className='profile-container'>
+      <Card className='card-container'>
         <Card.Body>
-          <Card.Title>
+          <Card.Title className='title'>
             <h1>Perfil</h1>
           </Card.Title>
-          <div style={{ padding: '0 25px', display: 'flex' }}>
+          <div className='profile-form'>
             <div>
-              <img style={{ width: '220px', height: '220px' }} src={person} alt='*'></img>
+              <img className='profile-image' src={person} alt='*'></img>
             </div>
 
-            <div style={{ marginLeft: '25px', width: '100%' }}>
-              <Form style={{ margin: '0 50px' }}>
+            <div className='form-input'>
+              <Form>
                 <FloatingLabel label='Usuário' className='mb-3'>
                   <Form.Control
                     name='username'
@@ -122,25 +126,16 @@ function Profile() {
                     required
                   />
                 </FloatingLabel>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p className='error-message'>{error}</p>}
               </Form>
             </div>
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              gap: '50px',
-              justifyContent: 'center',
-              marginBottom: '10px',
-              marginRight: '50px',
-              float: 'right',
-            }}
-          >
-            <Button as='a' variant='danger' onClick={handleDelete}>
+          <div className='action-buttons'>
+            <Button variant='danger' onClick={handleDelete}>
               Excluir conta
             </Button>
-            <Button as='a' onClick={handleEdit}>
+            <Button disabled={disableSubmit()} onClick={handleEdit}>
               Salvar Alterações
             </Button>
           </div>

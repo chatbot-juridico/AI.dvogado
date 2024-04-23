@@ -1,0 +1,31 @@
+.header {
+    background-color: #5574ff !important;
+    min-height: 80px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.logo {
+    width: 22%;
+    margin-right: 6%;
+}
+
+.nav-links {
+    margin-left: auto;
+}
+
+.nav-link {
+    margin-right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFF;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}

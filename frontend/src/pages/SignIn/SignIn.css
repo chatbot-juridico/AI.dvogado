@@ -1,0 +1,66 @@
+.signin-container {
+    background-color: #EFF;
+    padding: 100px 0;
+    height: 92vh;
+}
+
+.card-container {
+    margin: 0 30%;
+}
+
+.title {
+    text-align: center;
+}
+
+.form {
+    margin: 0 50px;
+}
+
+.form-input {
+    margin-bottom: 1.5rem;
+    font-size: 18px;
+}
+
+.form-input input {
+    font-size: 20px;
+}
+
+.error-message {
+    color: red;
+}
+
+.submit-button {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.submit-button button, .have-account button {
+    min-width: 200px;
+    font-size: 20px;
+}
+
+.have-account {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+@media screen and (max-width: 990px) {
+    .card-container {
+        transition: 0.3s all;
+        margin: 0 10%;
+    }
+}
+
+@media screen and (max-width: 609px) {
+    .signin-container {
+        transition: 0.3s all;
+        padding: 25px 0;
+    }
+
+    .card-container {
+        transition: 0.3s all;
+        margin: 0 3%;
+    }
+}
