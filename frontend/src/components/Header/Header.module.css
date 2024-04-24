@@ -10,6 +10,12 @@
     cursor: pointer;
 }
 
+.title {
+    color: #FFF;
+    font-weight: bold;
+    font-size: 24px;
+}
+
 .logo {
     width: 22%;
     margin-right: 6%;
@@ -26,6 +32,17 @@
     color: #FFF;
 }
 
+.dropdown {
+    margin-right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.dropdown a {
+    color: #FFF;
+}
+
 .dropdown-item {
     cursor: pointer;
+    color: #000 !important;
 }

@@ -8,7 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import api from '../../services/api';
 
-import './Feedback.css';
+import styles from './Feedback.module.css';
 
 function Feedback() {
   const [feedbackData, setFeedbackData] = useState({
@@ -69,14 +69,14 @@ function Feedback() {
   };
 
   return (
-    <div className="feedback-container">
-      <Card className="card-container">
+    <div className={styles.container}>
+      <Card className={styles.card}>
         <Card.Body>
-          <Card.Title className="title">
+          <Card.Title className={styles.title}>
             <h1>Enviar Feedback</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} className="form">
-            <FloatingLabel label='Email' className='form-input'>
+          <Form onSubmit={handleSubmit} className={styles.form}>
+            <FloatingLabel label='Email' className={styles['form-input']}>
               <Form.Control
                 type='email'
                 value={feedbackData.email}
@@ -88,9 +88,9 @@ function Feedback() {
               />
             </FloatingLabel>
 
-            <FloatingLabel label='Mensagem' className='form-input'>
+            <FloatingLabel label='Mensagem' className={styles['form-input']}>
               <Form.Control
-                style={{ height: '200px' }}
+                style={{ height: '150px' }}
                 as='textarea'
                 value={feedbackData.content}
                 onChange={(e) => {
@@ -100,9 +100,9 @@ function Feedback() {
                 required
               />
             </FloatingLabel>
-            {error && <p className="error-message">{error}</p>}
-            <div className='submit-button'>
-              <Button type='submit'>Enviar Feedback</Button>
+            {error && <p className={styles['error-message']}>{error}</p>}
+            <div>
+              <Button className={styles['submit-button']} type='submit'>Enviar Feedback</Button>
             </div>
           </Form>
         </Card.Body>
@@ -110,9 +110,9 @@ function Feedback() {
 
       {/* Feedback list */}
       {feedbacks?.length > 0 && (
-        <Card className="feedback-list">
+        <Card className={`${styles.card} ${styles['feedback-list']}`}>
           <Card.Body>
-            <Card.Title className="title">
+            <Card.Title className={styles.title}>
               <h1>Feedbacks</h1>
             </Card.Title>
             <ListGroup variant='flush'>

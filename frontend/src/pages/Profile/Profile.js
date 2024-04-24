@@ -6,11 +6,10 @@ import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import SuccessModal from '../../components/SuccessModal';
-import person from '../../assets/icons/person.png';
 
 import api from '../../services/api';
 
-import './Profile.css';
+import styles from './Profile.module.css';
 
 function Profile() {
   const navigate = useNavigate();
@@ -85,59 +84,55 @@ function Profile() {
   };
 
   return (
-    <div className='profile-container'>
-      <Card className='card-container'>
+    <div className={styles.container}>
+      <Card className={styles.card}>
         <Card.Body>
-          <Card.Title className='title'>
+          <Card.Title className={styles.title}>
             <h1>Perfil</h1>
           </Card.Title>
-          <div className='profile-form'>
-            <div>
-              <img className='profile-image' src={person} alt='*'></img>
-            </div>
+          <Form>
+            <FloatingLabel label='Usuário' className={styles['form-input']}>
+              <Form.Control
+                name='username'
+                value={userData.username}
+                onChange={handleChange}
+                placeholder='usuário'
+                required
+              />
+            </FloatingLabel>
+            <FloatingLabel label='Email' className={styles['form-input']}>
+              <Form.Control
+                name='email'
+                value={userData.email}
+                onChange={handleChange}
+                placeholder='email'
+                required
+              />
+            </FloatingLabel>
+            <FloatingLabel label='Nova Senha' className={styles['form-input']}>
+              <Form.Control
+                type='password'
+                name='password'
+                value={userData.password}
+                onChange={handleChange}
+                placeholder='nova senha'
+                required
+              />
+            </FloatingLabel>
+            {error && <p className={styles['error-message']}>{error}</p>}
+          </Form>
 
-            <div className='form-input'>
-              <Form>
-                <FloatingLabel label='Usuário' className='mb-3'>
-                  <Form.Control
-                    name='username'
-                    value={userData.username}
-                    onChange={handleChange}
-                    placeholder='usuário'
-                    required
-                  />
-                </FloatingLabel>
-                <FloatingLabel label='Email' className='mb-3'>
-                  <Form.Control
-                    name='email'
-                    value={userData.email}
-                    onChange={handleChange}
-                    placeholder='email'
-                    required
-                  />
-                </FloatingLabel>
-                <FloatingLabel label='Nova Senha' className='mb-3'>
-                  <Form.Control
-                    type='password'
-                    name='password'
-                    value={userData.password}
-                    onChange={handleChange}
-                    placeholder='nova senha'
-                    required
-                  />
-                </FloatingLabel>
-                {error && <p className='error-message'>{error}</p>}
-              </Form>
+          <div className={styles['action-buttons']}>
+            <div className={styles['submit-button']}>
+              <Button disabled={disableSubmit()} onClick={handleEdit}>
+                Salvar Alterações
+              </Button>
             </div>
-          </div>
-
-          <div className='action-buttons'>
-            <Button variant='danger' onClick={handleDelete}>
-              Excluir conta
-            </Button>
-            <Button disabled={disableSubmit()} onClick={handleEdit}>
-              Salvar Alterações
-            </Button>
+            <div className={styles['delete-button']}>
+              <Button variant='danger' onClick={handleDelete}>
+                Excluir conta
+              </Button>
+            </div>
           </div>
         </Card.Body>
       </Card>

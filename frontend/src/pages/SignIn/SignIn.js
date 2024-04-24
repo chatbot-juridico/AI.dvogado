@@ -8,7 +8,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import api from '../../services/api';
 
-import './SignIn.css';
+import styles from './SignIn.module.css';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -42,14 +42,14 @@ function SignIn() {
   };
 
   return (
-    <div className='signin-container'>
-      <Card className='card-container'>
+    <div className={styles.container}>
+      <Card className={styles.card}>
         <Card.Body>
-          <Card.Title className='title'>
+          <Card.Title className={styles.title}>
             <h1>Cadastro</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} className='form'>
-            <FloatingLabel label='Usuário' className='form-input'>
+          <Form onSubmit={handleSubmit}>
+            <FloatingLabel label='Usuário' className={styles['form-input']}>
               <Form.Control
                 value={signInData.username}
                 placeholder='usuário'
@@ -59,7 +59,7 @@ function SignIn() {
                 required
               />
             </FloatingLabel>
-            <FloatingLabel label='Email' className='form-input'>
+            <FloatingLabel label='Email' className={styles['form-input']}>
               <Form.Control
                 value={signInData.email}
                 placeholder='email'
@@ -69,8 +69,9 @@ function SignIn() {
                 required
               />
             </FloatingLabel>
-            <Form.Group className='form-input'>
+            <Form.Group className={styles['form-input']}>
               <Form.Check
+                className={styles.checkbox}
                 type='checkbox'
                 value={signInData.is_staff}
                 label='É administrador?'
@@ -79,7 +80,7 @@ function SignIn() {
                 }}
               />
             </Form.Group>
-            <FloatingLabel label='Senha' className='form-input'>
+            <FloatingLabel label='Senha' className={styles['form-input']}>
               <Form.Control
                 type='password'
                 value={signInData.password}
@@ -90,12 +91,12 @@ function SignIn() {
                 required
               />
             </FloatingLabel>
-            {error && <p className='error-message'>{error}</p>}
-            <div className='submit-button'>
+            {error && <p className={styles['error-message']}>{error}</p>}
+            <div className={styles['submit-button']}>
               <Button type='submit'>Criar Conta</Button>
             </div>
           </Form>
-          <div className='have-account'>
+          <div className={styles['have-account']}>
             <Button variant='secondary' onClick={() => navigate('/login')}>
               Já tem uma conta?
             </Button>

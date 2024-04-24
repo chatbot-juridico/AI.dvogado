@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import logo from '../assets/icons/logo.png';
-import './Header.css';
+import logo from '../../assets/icons/logo.png';
+import styles from './Header.module.css';
 
 function Header() {
   const navigate = useNavigate();
@@ -20,45 +20,48 @@ function Header() {
   };
 
   return (
-    <Navbar expand='lg' className='header'>
+    <Navbar expand='lg' className={styles.header}>
       <Container>
-        <Navbar.Brand onClick={() => navigate('/')}>
-          <img alt='Logo' src={logo} className='logo' />
-          Nome do Produto
+        <Navbar.Brand className={styles.title} onClick={() => navigate('/')}>
+          <img alt='Logo' src={logo} className={styles.logo} />
+          AI.dvogado
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
-          <Nav className='nav-links'>
+          <Nav className={styles['nav-links']}>
             {isLoggedIn ? (
               <>
-                <Nav.Link onClick={() => navigate('/chat')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/chat')} className={styles['nav-link']}>
                   Chat
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate('/about')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/about')} className={styles['nav-link']}>
                   O Projeto
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate('/feedback')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/feedback')} className={styles['nav-link']}>
                   Feedback
                 </Nav.Link>
-                <NavDropdown title='Conta' id='basic-nav-dropdown'>
-                  <NavDropdown.Item onClick={() => navigate('/profile')} className='dropdown-item'>
+                <NavDropdown title='Conta' className={styles['dropdown']}>
+                  <NavDropdown.Item
+                    onClick={() => navigate('/profile')}
+                    className={styles['dropdown-item']}
+                  >
                     Informações
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleLogout} className='dropdown-item'>
+                  <NavDropdown.Item onClick={handleLogout} className={styles['dropdown-item']}>
                     Sair
                   </NavDropdown.Item>
                 </NavDropdown>
               </>
             ) : (
               <>
-                <Nav.Link onClick={() => navigate('/about')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/about')} className={styles['nav-link']}>
                   O Projeto
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate('/feedback')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/feedback')} className={styles['nav-link']}>
                   Feedback
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate('/login')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/login')} className={styles['nav-link']}>
                   Login
                 </Nav.Link>
               </>

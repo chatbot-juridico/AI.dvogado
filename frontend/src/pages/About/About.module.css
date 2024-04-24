@@ -1,26 +1,18 @@
-.about-container {
-    background-color: #EFF;
-    padding: 100px 0;
-    height: 92vh;
+.container {
+    height: 100%;
+    padding: 100px 30%;
 }
 
-.card-container {
-    margin: 0 15%;
+.card {
+    padding: 2% 3%;
 }
 
 .title {
     text-align: center;
+    margin-bottom: 7%;
 }
 
-.paragraph {
-    padding: 0 25px;
-}
-
-.paragraph p {
-    font-size: large;
-}
-
-.icons-container {
+.icons {
     display: flex;
     gap: 10%;
     justify-content: center;
@@ -32,54 +24,59 @@
     height: 80px;
 }
 
-.rotate-icon {
+.rotate {
     transform: rotate(90deg);
 }
 
-.additional-info {
-    text-align: center;
+.center-text {
+    text-align: center;  
+}
+
+.bold-text {
     font-weight: bold;
 }
 
-.links-container {
+.links {
     display: flex;
     gap: 15%;
     justify-content: center;
-    margin: 25px;
+    margin-top: 25px;
 }
 
-.links-container a {
+.links a {
     font-size: 20px;
     width: 30%;
-    min-width: 200px;
+    min-width: 130px;
 }
 
 @media screen and (max-width: 990px) {
-    .card {
+    .container {
         transition: 0.3s all;
-        margin: 0 3%;
+        padding: 100px 3%;
     }
 }
 
 @media screen and (max-width: 609px) {
-    .links-container {
+
+    .container {
+        transition: 0.3s all;
+        padding: 50px 3%;
+    }
+
+    .links {
         transition: 0.3s all;
         flex-direction: column;
         align-items: center;
     }
 
-    .links-container a {
+    .links a {
+        width: 50%;
         margin-top: 15px;
-    }
-
-    .about-container {
-        transition: 0.3s all;
-        padding: 25px 0;
     }
 }
 
 @media screen and (max-width: 428px) {
-    .icons-container {
+    .icons {
         flex-direction: column;
         align-items: center;
     }

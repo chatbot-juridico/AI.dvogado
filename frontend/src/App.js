@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import Login from './pages/Login/Login';
 import Chat from './pages/Chat/Chat';
 import About from './pages/About/About';
@@ -11,7 +11,6 @@ import Profile from './pages/Profile/Profile';
 import Feedback from './pages/Feedback/Feedback';
 
 import PrivateRoutes from './components/PrivateRoutes';
-
 import background from './assets/images/not-found-background.jpg';
 
 import './App.scss';

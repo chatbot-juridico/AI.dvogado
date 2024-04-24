@@ -1,19 +1,15 @@
-.login-container {
-    background-color: #EFF;
-    padding: 100px 0;
-    height: 92vh;
+.container {
+    height: 100%;
+    padding: 100px 30%;
 }
 
-.card-container {
-    margin: 0 30%;
+.card {
+    padding: 2% 3%;
 }
 
 .title {
     text-align: center;
-}
-
-.form {
-    margin: 0 50px;
+    margin-bottom: 7%;
 }
 
 .form-input {
@@ -25,17 +21,17 @@
 }
 
 .error-message {
-    color: red;
+    color: var(--red300);
 }
 
-.submit-button {
-    margin-bottom: 25px;
-}
-
+.submit-button,
 .create-account {
     display: flex;
     justify-content: center;
-    margin-bottom: 25px;
+}
+
+.submit-button {
+    margin-bottom: 20px;
 }
 
 .submit-button button,
@@ -45,20 +41,21 @@
 }
 
 @media screen and (max-width: 990px) {
-    .card-container {
+    .container {
         transition: 0.3s all;
-        margin: 0 10%;
+        padding: 100px 3%;
     }
 }
 
 @media screen and (max-width: 609px) {
-    .login-container {
-        transition: 0.3s all;
-        padding: 25px 0;
+
+    .submit-button button,
+    .create-account button {
+        min-width: 42%;
     }
 
-    .card-container {
+    .container {
         transition: 0.3s all;
-        margin: 0 3%;
+        padding: 50px 3%;
     }
 }

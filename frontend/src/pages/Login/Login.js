@@ -8,7 +8,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import api from '../../services/api';
 
-import './Login.css';
+import styles from './Login.module.css';
 
 function Login() {
   const navigate = useNavigate();
@@ -42,14 +42,14 @@ function Login() {
   };
 
   return (
-    <div className='login-container'>
-      <Card className='card-container'>
+    <div className={styles.container}>
+      <Card className={styles.card}>
         <Card.Body>
-          <Card.Title className='title'>
+          <Card.Title className={styles.title}>
             <h1>Login</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} className='form'>
-            <FloatingLabel label='Usuário' className='form-input'>
+          <Form onSubmit={handleSubmit}>
+            <FloatingLabel label='Usuário' className={styles['form-input']}>
               <Form.Control
                 value={loginData.username}
                 onChange={(e) => {
@@ -60,7 +60,7 @@ function Login() {
               />
             </FloatingLabel>
 
-            <FloatingLabel label='Senha' className='form-input'>
+            <FloatingLabel label='Senha' className={styles['form-input']}>
               <Form.Control
                 type='password'
                 value={loginData.password}
@@ -71,12 +71,12 @@ function Login() {
                 required
               />
             </FloatingLabel>
-            {error && <p className='error-message'>{error}</p>}
-            <div className='submit-button'>
+            {error && <p className={styles['error-message']}>{error}</p>}
+            <div className={styles['submit-button']}>
               <Button type='submit'>Entrar</Button>
             </div>
           </Form>
-          <div className='create-account'>
+          <div className={styles['create-account']}>
             <Button variant='secondary' onClick={() => navigate('/sign-in')}>
               Criar conta
             </Button>
