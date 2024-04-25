@@ -22,6 +22,7 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<About />} />
+        <Route path='/chat' element={<Chat />} />
         <Route path='/about' element={<About />} />
         <Route path='/login' element={<Login />} />
         <Route path='/sign-in' element={<SignIn />} />
@@ -29,7 +30,6 @@ function App() {
         <Route path='*' element={<NotFound />} />
 
         <Route element={<PrivateRoutes />}>
-          <Route path='/chat' element={<Chat />} />
           <Route path='/profile' element={<Profile />} />
         </Route>
       </Routes>
@@ -41,7 +41,7 @@ function NotFound() {
   return (
     <div
       style={{
-        backgroundImage: `url(${background})`, // Corrigido aqui
+        backgroundImage: `url(${background})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '91.7vh',

@@ -55,7 +55,10 @@ function Header() {
               </>
             ) : (
               <>
-                <Nav.Link onClick={() => navigate('/about')} className={styles['nav-link']}>
+                <Nav.Link onClick={() => navigate('/chat')} className='nav-link'>
+                  Chat
+                </Nav.Link>
+                <Nav.Link onClick={() => navigate('/about')} className='nav-link'>
                   O Projeto
                 </Nav.Link>
                 <Nav.Link onClick={() => navigate('/feedback')} className={styles['nav-link']}>
