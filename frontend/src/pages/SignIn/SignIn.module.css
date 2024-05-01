@@ -20,6 +20,10 @@
     font-size: 20px;
 }
 
+.checkbox {
+    padding-left: 2em;
+}
+
 .checkbox label {
     position: relative;
     top: 5px;

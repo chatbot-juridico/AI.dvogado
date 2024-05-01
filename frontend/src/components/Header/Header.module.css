@@ -1,19 +1,25 @@
 .header {
-    background-color: #5574ff !important;
+    background-color: var(--blue);
     min-height: 80px;
 }
 
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
-    color: #FFF;
+    color: var(--white);
     cursor: pointer;
 }
 
 .title {
-    color: #FFF;
+    color: var(--white);
     font-weight: bold;
     font-size: 24px;
+    cursor: pointer;
+}
+
+.title:hover {
+    transition: 0.7s all;
+    color: var(--black);
 }
 
 .logo {
@@ -29,7 +35,12 @@
     margin-right: 15px;
     font-size: 20px;
     font-weight: bold;
-    color: #FFF;
+    color: var(--white);
+}
+
+.nav-link:hover {
+    transition: 0.7s all;
+    color: var(--black);
 }
 
 .dropdown {
@@ -39,10 +50,10 @@
 }
 
 .dropdown a {
-    color: #FFF;
+    color: var(--white);
 }
 
 .dropdown-item {
     cursor: pointer;
-    color: #000 !important;
+    color: var(--black) !important;
 }

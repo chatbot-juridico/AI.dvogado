@@ -41,10 +41,7 @@ function Header() {
                   Feedback
                 </Nav.Link>
                 <NavDropdown title='Conta' className={styles['dropdown']}>
-                  <NavDropdown.Item
-                    onClick={() => navigate('/profile')}
-                    className={styles['dropdown-item']}
-                  >
+                  <NavDropdown.Item onClick={() => navigate('/profile')} className={styles['dropdown-item']}>
                     Informações
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
@@ -55,10 +52,10 @@ function Header() {
               </>
             ) : (
               <>
-                <Nav.Link onClick={() => navigate('/chat')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/chat')} className={styles['nav-link']}>
                   Chat
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate('/about')} className='nav-link'>
+                <Nav.Link onClick={() => navigate('/about')} className={styles['nav-link']}>
                   O Projeto
                 </Nav.Link>
                 <Nav.Link onClick={() => navigate('/feedback')} className={styles['nav-link']}>

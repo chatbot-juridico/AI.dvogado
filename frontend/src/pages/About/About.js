@@ -38,10 +38,10 @@ function About() {
             <p>Para mais informações sobre a elaboração desse projeto, veja nos links abaixo:</p>
 
             <div className={styles.links}>
-              <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'>
+              <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7' target='_blank'>
                 Artigo
               </Button>
-              <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao'>
+              <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank'>
                 Repositório
               </Button>
             </div>
