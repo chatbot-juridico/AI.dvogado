@@ -5,10 +5,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Container } from 'react-bootstrap';
 
 import api from '../../services/api';
-
-import styles from './Login.module.css';
+import styles from './Login.module.scss';
 
 function Login() {
   const navigate = useNavigate();
@@ -42,10 +42,10 @@ function Login() {
   };
 
   return (
-    <div className={styles.container}>
-      <Card className={styles.card}>
+    <Container className={'content'}>
+      <Card>
         <Card.Body>
-          <Card.Title className={styles.title}>
+          <Card.Title>
             <h1>Login</h1>
           </Card.Title>
           <Form onSubmit={handleSubmit}>
@@ -72,18 +72,16 @@ function Login() {
               />
             </FloatingLabel>
             {error && <p className={styles['error-message']}>{error}</p>}
-            <div className={styles['submit-button']}>
+            <Container className={styles['action-buttons']}>
               <Button type='submit'>Entrar</Button>
-            </div>
+              <Button variant='secondary' type='button' onClick={() => navigate('/sign-in')}>
+                Criar conta
+              </Button>
+            </Container>
           </Form>
-          <div className={styles['create-account']}>
-            <Button variant='secondary' onClick={() => navigate('/sign-in')}>
-              Criar conta
-            </Button>
-          </div>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 }
 

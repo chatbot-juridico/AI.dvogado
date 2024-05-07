@@ -230,9 +230,9 @@ function Chat() {
   };
 
   return (
-    <Row className={styles['container']}>
+    <Row className={styles.container}>
       {/* CHAT */}
-      <Col lg={isExpanded ? 10 : 11} md={12} className={styles['chat-column']}>
+      <Col lg={isExpanded ? 9 : 11} md={12} className={styles['chat-column']}>
         {/* CHATS OVERLAY */}
         <Offcanvas show={showChats} onHide={handleClose}>
           <Offcanvas.Header closeButton>
@@ -281,7 +281,7 @@ function Chat() {
         </Offcanvas>
 
         {/* MESSAGES */}
-        <Card>
+        <Card className={styles['card']}>
           <Card.Body className={styles['chat-card']}>
             <Card.Title className={styles['chat-title']}>
               <Button variant='link' onClick={handleShow} disabled={!userId}>
@@ -294,7 +294,7 @@ function Chat() {
                   alt='='
                 />
               </Button>
-              <h2 contenteditable='true'>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
+              <h2 contentEditable='true'>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
               <div style={{ width: '30px' }}></div>
             </Card.Title>
             <div ref={divRef} className={styles['messages-container']}>
@@ -341,20 +341,21 @@ function Chat() {
         </Card>
 
         {/* INPUT */}
-        <Card className={styles['input-container']}>
+        <Card className={`${styles['input-container']} ${styles['card']}`}>
           <Card.Body className={styles['input-card']}>
             <Form style={{ width: '92%' }}>
               <Form.Control className={styles['input-textarea']} as='textarea' value={input} onChange={(e) => setInput(e.target.value)} placeholder='Sua mensagem...' required rows={2} />
             </Form>
-            <Button variant='primary' onClick={() => sendMessage(input, userId)} disabled={isLoading} className={styles['send-message-button']}>
-              <img
+            <Button onClick={() => sendMessage(input, userId)} disabled={isLoading} className={styles['send-message-button']}>
+              {/* <img
                 style={{
                   width: '25px',
                   height: '25px',
                 }}
                 src={arrowUp}
                 alt='^'
-              ></img>
+              ></img> */}
+              ^
             </Button>
           </Card.Body>
         </Card>
@@ -362,8 +363,8 @@ function Chat() {
 
       {/* SOBRE */}
       {isExpanded && (
-        <Col lg={2} md={12} sm={12}>
-          <Card>
+        <Col lg={3} md={12} sm={12}>
+          <Card className={styles['card']}>
             <Card.Body className={styles['about-card']}>
               <div className={styles['about-split-content']}>
                 <div>
@@ -382,7 +383,7 @@ function Chat() {
                   <Card.Text>Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por graduandos da Faculdade do Gama da Universidade de Brasília, com o tema “Utilização de Large Language Models no desenvolvimento de um chatbot para consultoria jurídico-trabalhista”.</Card.Text>
                   <Card.Text className={styles['about-warning']}>Esse chatbot está sujeito a erros e não substitui uma consultoria real com um advogado.</Card.Text>
                 </div>
-                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ width: '100%' }}>
                   <Card.Title style={{ textAlign: 'center' }}>
                     <h3>Links</h3>
                   </Card.Title>
@@ -404,7 +405,7 @@ function Chat() {
 
       {!isExpanded && (
         <Col lg={1} md={12}>
-          <Card>
+          <Card className={styles['card']}>
             <Card.Body className={styles['about-card']}>
               <div className={styles['about-split-content']} style={{ alignItems: 'center' }}>
                 <div className={styles['about-title-area']}>

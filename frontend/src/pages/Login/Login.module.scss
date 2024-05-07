@@ -1,0 +1,17 @@
+.form-input {
+    margin-bottom: 1.5rem;
+
+    input {
+        font-size: 18px;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+
+    button {
+        font-size: 18px
+    }
+}

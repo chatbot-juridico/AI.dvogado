@@ -5,10 +5,11 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Container } from 'react-bootstrap';
 
 import api from '../../services/api';
 
-import styles from './Feedback.module.css';
+import styles from './Feedback.module.scss';
 
 function Feedback() {
   const [feedbackData, setFeedbackData] = useState({
@@ -69,13 +70,13 @@ function Feedback() {
   };
 
   return (
-    <div className={styles.container}>
-      <Card className={styles.card}>
+    <Container className={styles['content']}>
+      <Card>
         <Card.Body>
-          <Card.Title className={styles.title}>
+          <Card.Title>
             <h1>Enviar Feedback</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} className={styles.form}>
+          <Form onSubmit={handleSubmit}>
             <FloatingLabel label='Email' className={styles['form-input']}>
               <Form.Control
                 type='email'
@@ -100,10 +101,10 @@ function Feedback() {
                 required
               />
             </FloatingLabel>
-            {error && <p className={styles['error-message']}>{error}</p>}
-            <div>
-              <Button className={styles['submit-button']} type='submit'>Enviar Feedback</Button>
-            </div>
+            {error && <p className={'error-message'}>{error}</p>}
+            <Container className={styles['action-buttons']}>
+              <Button type='submit'>Enviar Feedback</Button>
+            </Container>
           </Form>
         </Card.Body>
       </Card>
@@ -118,11 +119,7 @@ function Feedback() {
             <ListGroup variant='flush'>
               {feedbacks?.map(function (feedback, idx) {
                 return (
-                  <ListGroup.Item
-                    as='li'
-                    key={idx}
-                    className='d-flex justify-content-between align-items-start'
-                  >
+                  <ListGroup.Item as='li' key={idx} className='d-flex justify-content-between align-items-start'>
                     <div className='ms-2 me-auto'>
                       <div className='fw-bold'>{feedback.email}</div>
                       {feedback.content}
@@ -134,7 +131,7 @@ function Feedback() {
           </Card.Body>
         </Card>
       )}
-    </div>
+    </Container>
   );
 }
 

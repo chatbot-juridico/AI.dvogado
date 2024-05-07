@@ -11,6 +11,7 @@
     --white: #FFFFFF;
     --black: #303030;
     --gray: #EEEEEE;
+    --darkGray: #6C757D;
     --backgroundColor: #F5F8FA;
     --blue: #3456FF;
     --lightBlue: #8598FE;
@@ -37,24 +38,59 @@ h3 {
     color: var(--black);
 }
 
+.content {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3% auto;
+}
+
 .card {
     box-shadow: var(--defaultShadow);
+    padding: 1em;
+    width: 35%;
+
+    .card-title {
+        text-align: center;
+        margin-bottom: 1.5em;
+
+        h1 {
+            font-size: 2.2em;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .card {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 575px) {
+
+    .card {
+        width: 90%;
+    }
 }
 
 .btn-primary {
     background-color: var(--blue) !important;
     border-color: var(--blue) !important;
-}
 
-.btn-primary:hover,
-.btn-secondary:hover,
-.btn-danger:hover {
-    transition: 0.5s all;
-    font-size: 22px;
+    &:hover {
+        transition: 0.5s all;
+        background-color: var(--white) !important;
+        color: var(--blue) !important;
+    }
 }
 
 .loading {
     color: var(--blue) !important;
+}
+
+.error-message {
+    color: var(--red300);
 }
 
 .offcanvas {

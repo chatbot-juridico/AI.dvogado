@@ -4,15 +4,16 @@ import Button from 'react-bootstrap/Button';
 import message from '../../assets/icons/message.png';
 import waves from '../../assets/icons/waves.png';
 import justice from '../../assets/icons/justice.png';
-import styles from './About.module.css';
+import styles from './About.module.scss';
+import { Container } from 'react-bootstrap';
 
 function About() {
   return (
-    <div className={styles.container}>
-      <Card className={styles.card}>
+    <Container className={'content'}>
+      <Card className={styles['card']}>
         <Card.Body>
           <Card.Title>
-            <h1 className={styles.title}>O Projeto</h1>
+            <h1>O Projeto</h1>
           </Card.Title>
           <div>
             <p>
@@ -48,7 +49,7 @@ function About() {
           </div>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 }
 

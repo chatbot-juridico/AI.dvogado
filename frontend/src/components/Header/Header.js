@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import logo from '../../assets/icons/logo.png';
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
 
 function Header() {
   const navigate = useNavigate();
@@ -20,10 +20,10 @@ function Header() {
   };
 
   return (
-    <Navbar expand='lg' className={styles.header}>
+    <Navbar expand='lg' className={styles['header']}>
       <Container>
-        <Navbar.Brand className={styles.title} onClick={() => navigate('/')}>
-          <img alt='Logo' src={logo} className={styles.logo} />
+        <Navbar.Brand className={styles['title']} onClick={() => navigate('/')}>
+          <img className={styles['logo']} alt='Logo' src={logo} />
           AI.dvogado
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
