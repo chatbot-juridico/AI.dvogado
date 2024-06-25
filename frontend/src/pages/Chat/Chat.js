@@ -126,9 +126,6 @@ function Chat() {
     if (currentChat) {
       if (currentChat.messages.length === 0) return;
       const lastMessage = currentChat.messages[currentChat.messages.length - 1];
-      if (lastMessage.user !== 1) {
-        getBotAnswer();
-      }
     }
   }, [currentChat]);
 
@@ -153,7 +150,55 @@ function Chat() {
     handleClose();
     setTimeout(scrollDown, 100);
   };
-
+  
+  const sendMessage = async (message, user) => {
+    if (user !== 1) {
+      try {
+        // Update messages for the current user
+        await api.post('api/messages/', { chat: currentChat.id, content: message, user });
+        
+        const updatedChatMessages = { content: message, user };
+        
+        const updatedChats = chats.map((chat) => {
+          if (chat.id === currentChat.id) {
+            return {
+              ...chat,
+              messages: [...chat.messages, updatedChatMessages],
+            };
+          }
+          return chat;
+        });
+        
+        setChats(updatedChats);
+        setIsLoading(true);
+  
+        // Post the message as BOT to generate response
+        await api.post('api/messages/', { chat: currentChat.id, content: message, user: 1 });
+  
+        // Fetch the BOT response
+        const response = await api.get('api/messages/', { params: { chat: currentChat.id, user: 1, last: 1 } });
+        const bot_message = response.data[0].content;
+  
+        const botUpdatedChats = chats.map((chat) => {
+          if (chat.id === currentChat.id) {
+            return {
+              ...chat,
+              messages: [...chat.messages, updatedChatMessages, { content: bot_message, user: 1 }],
+            };
+          }
+          return chat;
+        });
+  
+        setChats(botUpdatedChats);
+        setIsLoading(false);
+  
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setInput('');
+      }
+    }
+  };
   const toggleMenu = (event) => {
     const icon = event.target;
     let currentRotation = parseInt(icon.style.transform.replace('rotate(', '').replace('deg)', ''), 10) || 0;

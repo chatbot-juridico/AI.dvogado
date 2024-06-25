@@ -14,6 +14,24 @@ class ChatViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    
+    def get_queryset(self):
+        queryset = Message.objects.all()
+        user_id = self.request.query_params.get('user', None)
+        chat_id = self.request.query_params.get('chat', None)
+        last_id = self.request.query_params.get('last', None)
+        
+        if user_id is not None:
+            queryset = queryset.filter(user=user_id)
+        
+        if chat_id is not None:
+            queryset = queryset.filter(chat=chat_id)
+            
+        if last_id == '1':
+            queryset = queryset.order_by('-id')
+            queryset = queryset.filter(id=queryset[0].id)
+            
+        return queryset
 
 
 class AllChatsWithMessagesView(APIView):
