@@ -17,7 +17,7 @@ urlpatterns = [
     path("api-auth/login/", ObtainAuthToken.as_view(), name="api-token-auth"),
     path(
         "api/user-details/",
-        UserDetailsView.as_view({"post": "user_details"}),
+        UserDetailsView.as_view({"get": "user_details"}),
         name="user-details",
     ),
     path(

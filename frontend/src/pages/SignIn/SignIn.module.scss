@@ -1,0 +1,26 @@
+.form-input {
+    margin-bottom: 1.5rem;
+
+    input {
+        font-size: 18px;
+    }
+
+    .checkbox {
+        padding-left: 1.9em;
+    }
+    
+    .checkbox label {
+        position: relative;
+        top: 5px;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+
+    button {
+        font-size: 18px
+    }
+}

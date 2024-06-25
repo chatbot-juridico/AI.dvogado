@@ -526,9 +526,9 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
 1	pbkdf2_sha256$600000$i45Rz8pCX3x4XapunN27Ya$glC9e52RGatX8bnUUS+ReBV12XrdP2SBEAHtKj/soJA=	\N	f	BOT			bot@email.com	t	t	2024-04-17 14:46:15.021723+00
-3	pbkdf2_sha256$600000$qm4aMD4P6OTVswsxLmycil$AGegqwjKE3OCtvtP5c9zxQL7oGV/D8lf/5ZnofWJR6s=	\N	f	Cleber			cleber@email.com	t	t	2024-04-17 15:14:12.277673+00
-4	pbkdf2_sha256$600000$XCtmSXQlD8T7ZEXsxUQluC$SDfwWOeBFggbkztOrIrfrAPwxAnAkexoinRvsz8CSzY=	\N	f	Julio			julinho@email.com	t	t	2024-04-17 15:18:10.768242+00
 2	pbkdf2_sha256$600000$AwTGbeRxpnUN1e5yNB1YH2$PLRFMOfZBLu0prCGvt+baFsm3ywq9KjgcKbhZzEBcGY=	\N	f	admin			admin@email.com	t	t	2024-04-17 14:46:29.080333+00
+4	pbkdf2_sha256$600000$j2pt7Zl77KCijBIbzSnPRT$0Cnvfl2D76626smvXYggmffgB5I5DXagsEYKJYO07/c=	\N	f	julio			julinho@email.com	f	t	2024-04-17 15:18:10.768242+00
+3	pbkdf2_sha256$600000$tkiONtvvoEdUGCHLfsKBL6$UgbHozqUZgmKYxiHuxruticnoAqan2243w4r7/y04s8=	\N	f	Cleber			cleber@email.com	f	t	2024-04-17 15:14:12.277673+00
 \.
 
 
@@ -571,6 +571,7 @@ COPY public.chats_chat (id, title, user_id) FROM stdin;
 18	Novo Chat 1	\N
 25	Novo Chat 1	4
 55	Novo Chat	2
+58	Novo Chat 1	2
 \.
 
 
@@ -581,6 +582,16 @@ COPY public.chats_chat (id, title, user_id) FROM stdin;
 COPY public.chats_message (id, content, chat_id, user_id) FROM stdin;
 3	Banana	55	2
 4	This was our last stop. This was it. We had those two embryos that we had banked prior to learning about the breast cancer, and with the medicine she was on, this was our last effort. The prayers were answered.	55	1
+7	Uau	55	2
+9	Ideas can be life-changing. Sometimes all you need to open the door is just one more good idea.	55	1
+10	Diga aí	58	2
+11	Remember the rights of the savage, as we call him. Remember that the happiness of his humble home, remember that the sanctity of life in the hill villages of Afghanistan, among the winter snows, is as inviolable in the eye of Almighty God, as can be your own.	58	1
+12	Interessante	58	2
+13	Your determination, selflessness and courage have brought the freedom struggle towards its fulfilment.	58	1
+14	E o que mais?	58	2
+15	Probably induced by the asthma, I started reading and writing early on, my literary efforts from the age of about nine running chiefly to poetry and plays.	58	1
+16	Olha só! Curioso	58	2
+17	Not only our future economic soundness but the very soundness of our democratic institutions depends on the determination of our government to give employment to idle men.	58	1
 \.
 
 
@@ -709,14 +720,14 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: chats_chat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_chat_id_seq', 57, true);
+SELECT pg_catalog.setval('public.chats_chat_id_seq', 58, true);
 
 
 --
 -- Name: chats_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_message_id_seq', 6, true);
+SELECT pg_catalog.setval('public.chats_message_id_seq', 17, true);
 
 
 --

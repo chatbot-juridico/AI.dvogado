@@ -1,20 +1,21 @@
 import React from 'react';
-
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import message from '../../assets/icons/message.png';
 import waves from '../../assets/icons/waves.png';
 import justice from '../../assets/icons/justice.png';
+import styles from './About.module.scss';
+import { Container } from 'react-bootstrap';
 
 function About() {
   return (
-    <Card style={{ padding: '25px', backgroundColor: 'rgb(73 211 168)', margin: '25px' }}>
-      <Card>
-        <Card.Body style={{ backgroundColor: '#E9E9E9' }}>
+    <Container className={'content'}>
+      <Card className={styles['card']}>
+        <Card.Body>
           <Card.Title>
             <h1>O Projeto</h1>
           </Card.Title>
-          <div style={{ padding: '0 25px' }}>
+          <div>
             <p>
               Este chatbot é resultado de um trabalho com o objetivo de explorar o uso de chatbots
               no contexto jurídico, uma área em que a automação e a interação com o usuário são de
@@ -24,37 +25,31 @@ function About() {
               específicas do setor jurídico, seja do usuário comum tanto do advogado.
             </p>
 
-            <div style={{ display: 'flex', gap: '30px', justifyContent: 'center', margin: '25px' }}>
-              <img style={{ width: '80px', height: '80px' }} src={message} alt='*'></img>
-              <img
-                style={{ width: '80px', height: '80px', transform: 'rotate(90deg)' }}
-                src={waves}
-                alt='*'
-              ></img>
-              <img style={{ width: '80px', height: '80px' }} src={justice} alt='*'></img>
+            <div className={styles.icons}>
+              <img className={styles.icon} src={message} alt='*'></img>
+              <img className={`${styles.icon} ${styles.rotate}`} src={waves} alt='*'></img>
+              <img className={styles.icon} src={justice} alt='*'></img>
             </div>
 
-            <p>
+            <p className={`${styles['center-text']} ${styles['bold-text']}`}>
               Essa aplicação e qualquer informação ou conselho apresentado não substitui consultoria
               com um profissional do direito.
             </p>
 
             <p>Para mais informações sobre a elaboração desse projeto, veja nos links abaixo:</p>
 
-            <div
-              style={{ display: 'flex', gap: '200px', justifyContent: 'center', margin: '25px' }}
-            >
-              <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'>
+            <div className={styles.links}>
+              <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7' target='_blank'>
                 Artigo
               </Button>
-              <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao'>
+              <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank'>
                 Repositório
               </Button>
             </div>
           </div>
         </Card.Body>
       </Card>
-    </Card>
+    </Container>
   );
 }
 

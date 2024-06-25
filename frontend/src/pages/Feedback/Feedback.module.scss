@@ -1,0 +1,30 @@
+.content {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 3em;
+}
+
+.form-input {
+    margin-bottom: 1.5rem;
+
+    input {
+        font-size: 18px;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+
+    button {
+        font-size: 18px
+    }
+}
+
+.feedback-list {
+    margin-top: 3em;
+}

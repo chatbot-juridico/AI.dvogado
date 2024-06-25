@@ -1,0 +1,52 @@
+.header {
+    background-color: var(--blue);
+    min-height: 80px;
+
+    .title {
+        color: var(--white);
+        font-weight: bold;
+        font-size: 24px;
+        cursor: pointer;
+
+        &:hover {
+            transition: 0.7s all;
+            color: var(--black);
+        }
+
+        .logo {
+            width: 22%;
+            margin-right: 6%;
+        }
+    }
+
+    .nav-links {
+        margin-left: auto;
+
+        .nav-link {
+            margin-right: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        .nav-link:hover {
+            transition: 0.7s all;
+            color: var(--black);
+        }
+
+        .dropdown {
+            margin-right: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .dropdown a {
+            color: var(--white);
+        }
+
+        .dropdown-item {
+            cursor: pointer;
+            color: var(--black) !important;
+        }
+    }
+}

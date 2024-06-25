@@ -1,5 +1,98 @@
 * {
-    padding: 0;
-    margin: 0;
-    font-family: 'Inter';
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+}
+
+:root {
+    --white: #FFFFFF;
+    --black: #303030;
+    --gray: #EEEEEE;
+    --darkGray: #6C757D;
+    --backgroundColor: #F5F8FA;
+    --blue: #3456FF;
+    --lightBlue: #8598FE;
+
+
+    --defaultShadow: 0.3px 0.3px 2.2px rgba(0, 0, 0, 0.02),
+        0.8px 0.8px 5.3px rgba(0, 0, 0, 0.028),
+        1.5px 1.5px 10px rgba(0, 0, 0, 0.035),
+        2.7px 2.7px 17.9px rgba(0, 0, 0, 0.042),
+        5px 5px 33.4px rgba(0, 0, 0, 0.05),
+        12px 12px 80px rgba(0, 0, 0, 0.07);
+}
+
+#root {
+    background-color: var(--backgroundColor);
+    min-height: 100vh;
+    height: 100%;
+}
+
+p,
+h1,
+h2,
+h3 {
+    color: var(--black);
+}
+
+.content {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3% auto;
+}
+
+.card {
+    box-shadow: var(--defaultShadow);
+    padding: 1em;
+    width: 35%;
+
+    .card-title {
+        text-align: center;
+        margin-bottom: 1.5em;
+
+        h1 {
+            font-size: 2.2em;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .card {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 575px) {
+
+    .card {
+        width: 90%;
+    }
+}
+
+.btn-primary {
+    background-color: var(--blue) !important;
+    border-color: var(--blue) !important;
+
+    &:hover {
+        transition: 0.5s all;
+        background-color: var(--white) !important;
+        color: var(--blue) !important;
+    }
+}
+
+.loading {
+    color: var(--blue) !important;
+}
+
+.error-message {
+    color: var(--red300);
+}
+
+.offcanvas {
+    background-color: var(--backgroundColor) !important;
 }

@@ -27,15 +27,17 @@ class UserViewSet(viewsets.ModelViewSet):
 
         username = request.data.get("username")
         email = request.data.get("email")
+        is_staff = True if request.data.get("is_staff") else False
         password = request.data.get("password")
 
         if password:
             instance.set_password(password)
-
         if username:
             instance.username = username
         if email:
             instance.email = email
+        if is_staff != None:
+            instance.is_staff = is_staff
 
         instance.save()
         serializer = self.get_serializer(instance)
@@ -43,9 +45,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class UserDetailsView(viewsets.ViewSet):
-    @action(detail=False, methods=["post"])
+    @action(detail=False, methods=["get"])
     def user_details(self, request):
-        auth_token = request.data.get("token", None)
+        auth_token = request.query_params.get("token", None)
 
         if not auth_token:
             return Response(

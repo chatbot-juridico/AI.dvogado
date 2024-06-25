@@ -1,26 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Container } from 'react-bootstrap';
 
 import api from '../../services/api';
+import styles from './Login.module.scss';
 
 function Login() {
-  const usernameRef = useRef();
-  const passwordRef = useRef();
-  const [error, setError] = useState();
   const navigate = useNavigate();
+  const [loginData, setLoginData] = useState({
+    username: '',
+    password: '',
+  });
+  const [error, setError] = useState();
+
+  const handleInputChange = (e, field) => {
+    setLoginData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const loginData = {
-      username: usernameRef.current.value,
-      password: passwordRef.current.value,
-    };
 
     await api
       .post('/api-auth/login/', loginData)
@@ -36,31 +42,46 @@ function Login() {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFF', padding: '100px 0', height: '89vh' }}>
-      <Card style={{ margin: '0 30%' }}>
+    <Container className={'content'}>
+      <Card>
         <Card.Body>
           <Card.Title>
             <h1>Login</h1>
           </Card.Title>
-          <Form onSubmit={handleSubmit} style={{ margin: '0 50px' }}>
-            <FloatingLabel label='Usuário' className='mb-3'>
-              <Form.Control ref={usernameRef} placeholder='usuário' required />
+          <Form onSubmit={handleSubmit}>
+            <FloatingLabel label='Usuário' className={styles['form-input']}>
+              <Form.Control
+                value={loginData.username}
+                onChange={(e) => {
+                  handleInputChange(e, 'username');
+                }}
+                placeholder='usuário'
+                required
+              />
             </FloatingLabel>
 
-            <FloatingLabel label='Senha' className='mb-3'>
-              <Form.Control type='password' ref={passwordRef} placeholder='senha' required />
+            <FloatingLabel label='Senha' className={styles['form-input']}>
+              <Form.Control
+                type='password'
+                value={loginData.password}
+                onChange={(e) => {
+                  handleInputChange(e, 'password');
+                }}
+                placeholder='senha'
+                required
+              />
             </FloatingLabel>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className='d-grid' style={{ marginBottom: '25px' }}>
+            {error && <p className={styles['error-message']}>{error}</p>}
+            <Container className={styles['action-buttons']}>
               <Button type='submit'>Entrar</Button>
-            </div>
+              <Button variant='secondary' type='button' onClick={() => navigate('/sign-in')}>
+                Criar conta
+              </Button>
+            </Container>
           </Form>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
-            <Button onClick={() => navigate('/sign-in')}>Criar conta</Button>
-          </div>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 }
 
