@@ -53,9 +53,6 @@ function Chat() {
     if (currentChat) {
       if (currentChat.messages.length === 0) return;
       const lastMessage = currentChat.messages[currentChat.messages.length - 1];
-      if (lastMessage.user !== 1) {
-        getBotAnswer(lastMessage.text);
-      }
     }
   }, [currentChat]);
 
@@ -94,51 +91,52 @@ function Chat() {
     setTimeout(scrollDown, 100);
   };
 
-  const sendMessage = (message, user) => {
-    api
-      .post('api/messages/', { chat: currentChat.id, content: message, user: user })
-      .then(() => {
+  const sendMessage = async (message, user) => {
+    if (user !== 1) {
+      try {
+        // Update messages for the current user
+        await api.post('api/messages/', { chat: currentChat.id, content: message, user });
+        
+        const updatedChatMessages = { content: message, user };
+        
         const updatedChats = chats.map((chat) => {
           if (chat.id === currentChat.id) {
             return {
               ...chat,
-              messages: [...chat.messages, { content: message, user: user }],
+              messages: [...chat.messages, updatedChatMessages],
             };
           }
           return chat;
         });
+        
         setChats(updatedChats);
+        setIsLoading(true);
+  
+        // Post the message as BOT to generate response
+        await api.post('api/messages/', { chat: currentChat.id, content: message, user: 1 });
+  
+        // Fetch the BOT response
+        const response = await api.get('api/messages/', { params: { chat: currentChat.id, user: 1, last: 1 } });
+        const bot_message = response.data[0].content;
+  
+        const botUpdatedChats = chats.map((chat) => {
+          if (chat.id === currentChat.id) {
+            return {
+              ...chat,
+              messages: [...chat.messages, updatedChatMessages, { content: bot_message, user: 1 }],
+            };
+          }
+          return chat;
+        });
+  
+        setChats(botUpdatedChats);
         setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error:' + err);
-      })
-      .finally(() => {
+  
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
         setInput('');
-      });
-  };
-
-  const getBotAnswer = async (message) => {
-    setIsLoading(true);
-    const options = {
-      method: 'GET',
-      url: 'https://famous-quotes4.p.rapidapi.com/random',
-      params: {
-        category: 'all',
-        count: '1',
-      },
-      headers: {
-        'X-RapidAPI-Key': '48969325c7msh182124cce3b96dap1c5a70jsn7bca8705e06e',
-        'X-RapidAPI-Host': 'famous-quotes4.p.rapidapi.com',
-      },
-    };
-    try {
-      const response = await axios.request(options);
-      const content = response.data[0].text;
-      const botId = 1;
-      sendMessage(content, botId);
-    } catch (error) {
-      console.error(error);
+      }
     }
   };
 
