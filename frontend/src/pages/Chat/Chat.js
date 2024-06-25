@@ -71,33 +71,6 @@ function Chat() {
     }
   }, [chats, currentChat]);
 
-  const sendMessage = useCallback(
-    (message, user) => {
-      api
-        .post('api/messages/', { chat: currentChat.id, content: message, user: user })
-        .then((res) => {
-          const updatedChats = chats.map((chat) => {
-            if (chat.id === currentChat.id) {
-              return {
-                ...chat,
-                messages: [...chat.messages, res.data],
-              };
-            }
-            return chat;
-          });
-          setChats(updatedChats);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error('Error:' + err);
-        })
-        .finally(() => {
-          setInput('');
-        });
-    },
-    [chats, currentChat, setChats, setIsLoading, setInput]
-  );
-
   useEffect(() => {
     const getBotAnswer = async () => {
       setIsLoading(true);
@@ -170,6 +143,7 @@ function Chat() {
         });
         
         setChats(updatedChats);
+        setInput('');
         setIsLoading(true);
   
         // Post the message as BOT to generate response
@@ -194,8 +168,6 @@ function Chat() {
   
       } catch (error) {
         console.error('Error:', error);
-      } finally {
-        setInput('');
       }
     }
   };
