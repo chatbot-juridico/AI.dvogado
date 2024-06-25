@@ -24,5 +24,6 @@ def bot_response_api(message):
 
     answer = re.sub(r"{'generated_text': '<s>\[INST\](.*?)\[\/INST\] ", "", response)
     answer = answer.replace("}", "").replace("'", "")
+    answer = answer.replace('\\n', '\n\n')
 
     return(answer)
