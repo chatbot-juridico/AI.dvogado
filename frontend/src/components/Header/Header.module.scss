@@ -1,52 +1,49 @@
 .header {
-    background-color: var(--blue);
-    min-height: 80px;
+  color: white; /* Cor do texto */
+  height: 120px; /* Altura do header */
+  background-color: #45a9b3;
+  width: 100%; /* Largura total */
+  position: fixed; /* Fixar o header no topo */
+  top: 0; /* Posicionar no topo */
+  left: 0; /* Alinhar à esquerda */
+  z-index: 1000; /* Garantir que fique acima de outros elementos */
+  box-shadow: var(--defaultShadow);
 
-    .title {
-        color: var(--white);
-        font-weight: bold;
-        font-size: 24px;
-        cursor: pointer;
+  .title {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: white;
+    margin: 0 5rem 0;
+  }
+}
 
-        &:hover {
-            transition: 0.7s all;
-            color: var(--black);
-        }
+.navbar-nav {
+  margin-left: auto; /* Alinhar os itens à direita */
+}
 
-        .logo {
-            width: 22%;
-            margin-right: 6%;
-        }
-    }
+.nav-link {
+  color: white !important; /* Cor do texto dos links */
+  margin-right: 15px; /* Espaçamento entre os links */
+  cursor: pointer; /* Cursor de ponteiro ao passar por cima */
+  font-size: 20px;
 
-    .nav-links {
-        margin-left: auto;
+  &:hover {
+    transition: 0.7s all;
+    color: black !important;
+}
+}
 
-        .nav-link {
-            margin-right: 15px;
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--white);
-        }
+.dropdown {
+  margin-right: 15px;
+  font-size: 20px;
+}
 
-        .nav-link:hover {
-            transition: 0.7s all;
-            color: var(--black);
-        }
+.dropdown a {
+  color: var(--white);
+}
 
-        .dropdown {
-            margin-right: 15px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .dropdown a {
-            color: var(--white);
-        }
-
-        .dropdown-item {
-            cursor: pointer;
-            color: var(--black) !important;
-        }
-    }
+.dropdown-item {
+  cursor: pointer;
+  color: black !important;
 }

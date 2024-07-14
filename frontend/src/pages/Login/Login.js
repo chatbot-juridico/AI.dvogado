@@ -42,11 +42,11 @@ function Login() {
   };
 
   return (
-    <Container className={'content'}>
+    <Container className={styles['content']}>
       <Card>
         <Card.Body>
           <Card.Title>
-            <h1>Login</h1>
+            <h1>Entrar</h1>
           </Card.Title>
           <Form onSubmit={handleSubmit}>
             <FloatingLabel label='Usuário' className={styles['form-input']}>

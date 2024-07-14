@@ -1,10 +1,11 @@
-.container {
-    padding: 25px 15px;
+.content {
+    padding: 9rem 15px 0;
     margin: 0 auto;
 
     .card {
         width: 100%;
         padding: 0;
+        border: none;
     }
 
     .chat-column {
@@ -19,7 +20,9 @@
                 margin: 0;
                 padding: 10px;
                 justify-content: space-between;
-                background-color: var(--lightBlue);
+                border-bottom: solid;
+                border-width: 1px;
+                border-color: gray;
 
                 h2 {
                     display: flex;
@@ -75,6 +78,7 @@
 
         .input-container {
             background-color: var(--lightBlue);
+            border-radius: 0;
 
             .input-card {
                 display: flex;
@@ -92,8 +96,16 @@
                 .send-message-button {
                     display: flex;
                     align-items: center;
+                    justify-content: center;
                     min-height: 45px;
                     min-width: 45px;
+                    transition: 0.2s all;
+
+                    &:hover {
+                        min-height: 50px;
+                        min-width: 60px;
+                        background-color: var(--blue) !important;
+                    }
                 }
             }
         }
@@ -104,7 +116,8 @@
         display: flex;
         flex-direction: column;
         height: 85vh;
-        background-color: var(--lightBlue);
+        background-color: white;
+        border-radius: 1rem;
 
         .about-split-content {
             display: flex;

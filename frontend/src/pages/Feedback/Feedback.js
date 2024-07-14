@@ -6,10 +6,11 @@ import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Container } from 'react-bootstrap';
+import styles from '../Home/Home.module.scss';
 
 import api from '../../services/api';
 
-import styles from './Feedback.module.scss';
+import fstyles from './Feedback.module.scss';
 
 function Feedback() {
   const [feedbackData, setFeedbackData] = useState({
@@ -70,68 +71,71 @@ function Feedback() {
   };
 
   return (
-    <Container className={styles['content']}>
-      <Card>
-        <Card.Body>
-          <Card.Title>
-            <h1>Enviar Feedback</h1>
-          </Card.Title>
-          <Form onSubmit={handleSubmit}>
-            <FloatingLabel label='Email' className={styles['form-input']}>
-              <Form.Control
-                type='email'
-                value={feedbackData.email}
-                onChange={(e) => {
-                  handleChange(e, 'email');
-                }}
-                placeholder='email'
-                required
-              />
-            </FloatingLabel>
+    <div className={styles['content']}>
+      <div className={styles['horizontal-banner']}>
+        <div className={styles['banner-content']}>
+          <p className={styles['banner-title']}>Sua opinião é importante para nós!</p>
 
-            <FloatingLabel label='Mensagem' className={styles['form-input']}>
-              <Form.Control
-                style={{ height: '150px' }}
-                as='textarea'
-                value={feedbackData.content}
-                onChange={(e) => {
-                  handleChange(e, 'content');
-                }}
-                placeholder='sua mensagem'
-                required
-              />
-            </FloatingLabel>
-            {error && <p className={'error-message'}>{error}</p>}
-            <Container className={styles['action-buttons']}>
-              <Button type='submit'>Enviar Feedback</Button>
-            </Container>
-          </Form>
-        </Card.Body>
-      </Card>
+          <p className={styles['banner-text']}>Agradecemos por dedicar um momento para compartilhar seus pensamentos conosco. Seu feedback nos ajuda a melhorar continuamente nossos serviços e garantir que sua experiência seja excepcional. Por favor, preencha o formulário abaixo e nos ajude a entender como podemos atendê-lo melhor.</p>
+        </div>
+      </div>
 
-      {/* Feedback list */}
-      {feedbacks?.length > 0 && (
-        <Card className={`${styles.card} ${styles['feedback-list']}`}>
-          <Card.Body>
-            <Card.Title className={styles.title}>
-              <h1>Feedbacks</h1>
-            </Card.Title>
-            <ListGroup variant='flush'>
-              {feedbacks?.map(function (feedback, idx) {
-                return (
-                  <ListGroup.Item as='li' key={idx} className='d-flex justify-content-between align-items-start'>
-                    <div className='ms-2 me-auto'>
-                      <div className='fw-bold'>{feedback.email}</div>
-                      {feedback.content}
-                    </div>
-                  </ListGroup.Item>
-                );
-              })}
-            </ListGroup>
-          </Card.Body>
-        </Card>
-      )}
-    </Container>
+      <Form onSubmit={handleSubmit} className={fstyles['form']}>
+        <FloatingLabel label='Email para contato' className={fstyles['form-input']}>
+          <Form.Control
+            type='email'
+            value={feedbackData.email}
+            onChange={(e) => {
+              handleChange(e, 'email');
+            }}
+            placeholder='email'
+            required
+          />
+        </FloatingLabel>
+
+        <FloatingLabel label='No que podemos melhorar?' className={fstyles['form-input']}>
+          <Form.Control
+            style={{ height: '150px' }}
+            as='textarea'
+            value={feedbackData.content}
+            onChange={(e) => {
+              handleChange(e, 'content');
+            }}
+            placeholder='sua mensagem'
+            required
+          />
+        </FloatingLabel>
+        {error && <p className={'error-message'}>{error}</p>}
+        <Button className={fstyles['submit-btn']} type='submit'>
+          Enviar Feedback
+        </Button>
+      </Form>
+
+      <Container>
+        {/* Feedback list */}
+        {feedbacks?.length > 0 && (
+          <Card>
+            <Card.Body>
+              <Card.Title>
+                <h3>Feedbacks</h3>
+              </Card.Title>
+              <ListGroup variant='flush'>
+                {feedbacks?.map(function (feedback, idx) {
+                  return (
+                    <ListGroup.Item as='li' key={idx} className='d-flex justify-content-between align-items-start'>
+                      <div className='ms-2 me-auto'>
+                        <div className='fw-bold'>{feedback.email}</div>
+                        {feedback.content}
+                      </div>
+                    </ListGroup.Item>
+                  );
+                })}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        )}
+      </Container>
+    </div>
   );
 }
 

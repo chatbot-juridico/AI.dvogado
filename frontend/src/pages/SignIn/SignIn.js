@@ -43,7 +43,7 @@ function SignIn() {
   };
 
   return (
-    <Container className={'content'}>
+    <Container className={styles['content']}>
       <Card>
         <Card.Body>
           <Card.Title>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import axios from 'axios'; // TEMP
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -13,9 +13,9 @@ import Form from 'react-bootstrap/Form';
 
 import icon from '../../assets/icons/icon.png';
 import menu from '../../assets/icons/menu.png';
-import arrowUp from '../../assets/icons/arrow-up.png';
 import reload from '../../assets/icons/reload.png';
 import clipboard from '../../assets/icons/clipboard.png';
+import arrowUp from '../../assets/icons/arrow-up.png';
 
 import api from '../../services/api';
 import styles from './Chat.module.scss';
@@ -98,7 +98,7 @@ function Chat() {
 
     if (currentChat) {
       if (currentChat.messages.length === 0) return;
-      const lastMessage = currentChat.messages[currentChat.messages.length - 1];
+      // const lastMessage = currentChat.messages[currentChat.messages.length - 1];
     }
   }, [currentChat]);
 
@@ -123,15 +123,15 @@ function Chat() {
     handleClose();
     setTimeout(scrollDown, 100);
   };
-  
+
   const sendMessage = async (message, user) => {
     if (user !== 1) {
       try {
         // Update messages for the current user
         await api.post('api/messages/', { chat: currentChat.id, content: message, user });
-        
+
         const updatedChatMessages = { content: message, user };
-        
+
         const updatedChats = chats.map((chat) => {
           if (chat.id === currentChat.id) {
             return {
@@ -141,18 +141,18 @@ function Chat() {
           }
           return chat;
         });
-        
+
         setChats(updatedChats);
         setInput('');
         setIsLoading(true);
-  
+
         // Post the message as BOT to generate response
         await api.post('api/messages/', { chat: currentChat.id, content: message, user: 1 });
-  
+
         // Fetch the BOT response
         const response = await api.get('api/messages/', { params: { chat: currentChat.id, user: 1, last: 1 } });
         const bot_message = response.data[0].content;
-  
+
         const botUpdatedChats = chats.map((chat) => {
           if (chat.id === currentChat.id) {
             return {
@@ -162,10 +162,9 @@ function Chat() {
           }
           return chat;
         });
-  
+
         setChats(botUpdatedChats);
         setIsLoading(false);
-  
       } catch (error) {
         console.error('Error:', error);
       }
@@ -247,7 +246,7 @@ function Chat() {
   };
 
   return (
-    <Row className={styles.container}>
+    <Row className={styles['content']}>
       {/* CHAT */}
       <Col lg={isExpanded ? 9 : 11} md={12} className={styles['chat-column']}>
         {/* CHATS OVERLAY */}
@@ -301,16 +300,25 @@ function Chat() {
         <Card className={styles['card']}>
           <Card.Body className={styles['chat-card']}>
             <Card.Title className={styles['chat-title']}>
-              <Button variant='link' onClick={handleShow} disabled={!userId}>
-                <img
+              {(userId && (
+                <Button variant='link' onClick={handleShow}>
+                  <img
+                    style={{
+                      width: '30px',
+                      height: '30px',
+                    }}
+                    src={menu}
+                    alt='='
+                  />
+                </Button>
+              )) || (
+                <div
                   style={{
                     width: '30px',
                     height: '30px',
                   }}
-                  src={menu}
-                  alt='='
-                />
-              </Button>
+                ></div>
+              )}
               <h2 contentEditable='true'>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
               <div style={{ width: '30px' }}></div>
             </Card.Title>
@@ -364,15 +372,14 @@ function Chat() {
               <Form.Control className={styles['input-textarea']} as='textarea' value={input} onChange={(e) => setInput(e.target.value)} placeholder='Sua mensagem...' required rows={2} />
             </Form>
             <Button onClick={() => sendMessage(input, userId)} disabled={isLoading} className={styles['send-message-button']}>
-              {/* <img
+              <img
                 style={{
                   width: '25px',
                   height: '25px',
                 }}
                 src={arrowUp}
                 alt='^'
-              ></img> */}
-              ^
+              ></img>
             </Button>
           </Card.Body>
         </Card>
