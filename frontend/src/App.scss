@@ -1,98 +1,59 @@
 * {
-    font-family: "Open Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings:
-        "wdth" 100;
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+
+  scroll-behavior: smooth;
 }
 
 :root {
-    --white: #FFFFFF;
-    --black: #303030;
-    --gray: #EEEEEE;
-    --darkGray: #6C757D;
-    --backgroundColor: #F5F8FA;
-    --blue: #3456FF;
-    --lightBlue: #8598FE;
+  --white: #ffffff;
+  --black: #303030;
+  --gray: #eeeeee;
+  --darkGray: #6c757d;
+  --backgroundColor: #f5f8fa;
+  --blue: #3456ff;
+  --lightBlue: #8598fe;
 
+  --color1: #141619;
+  --color2: #2c2e3a;
+  --color3: #050a44;
+  --color4: #0a21c0;
+  --color5: #b3b4bd;
 
-    --defaultShadow: 0.3px 0.3px 2.2px rgba(0, 0, 0, 0.02),
-        0.8px 0.8px 5.3px rgba(0, 0, 0, 0.028),
-        1.5px 1.5px 10px rgba(0, 0, 0, 0.035),
-        2.7px 2.7px 17.9px rgba(0, 0, 0, 0.042),
-        5px 5px 33.4px rgba(0, 0, 0, 0.05),
-        12px 12px 80px rgba(0, 0, 0, 0.07);
+  --defaultShadow: 0.3px 0.3px 2.2px rgba(0, 0, 0, 0.02), 0.8px 0.8px 5.3px rgba(0, 0, 0, 0.028), 1.5px 1.5px 10px rgba(0, 0, 0, 0.035), 2.7px 2.7px 17.9px rgba(0, 0, 0, 0.042), 5px 5px 33.4px rgba(0, 0, 0, 0.05), 12px 12px 80px rgba(0, 0, 0, 0.07);
 }
 
 #root {
-    background-color: var(--backgroundColor);
-    min-height: 100vh;
-    height: 100%;
+  background: linear-gradient(180deg, #45a9b3 0%, #0e1654 100%);
+  min-height: 100vh;
+  height: 100%;
 }
 
 p,
 h1,
 h2,
 h3 {
-    color: var(--black);
-}
-
-.content {
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 3% auto;
-}
-
-.card {
-    box-shadow: var(--defaultShadow);
-    padding: 1em;
-    width: 35%;
-
-    .card-title {
-        text-align: center;
-        margin-bottom: 1.5em;
-
-        h1 {
-            font-size: 2.2em;
-        }
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .card {
-        width: 75%;
-    }
-}
-
-@media screen and (max-width: 575px) {
-
-    .card {
-        width: 90%;
-    }
+  color: var(--black);
 }
 
 .btn-primary {
-    background-color: var(--blue) !important;
-    border-color: var(--blue) !important;
+  background-color: var(--blue) !important;
+  border-color: var(--blue) !important;
 
-    &:hover {
-        transition: 0.5s all;
-        background-color: var(--white) !important;
-        color: var(--blue) !important;
-    }
-}
-
-.loading {
+  &:hover {
+    transition: 0.5s all;
+    background-color: var(--white) !important;
     color: var(--blue) !important;
+  }
 }
 
-.error-message {
-    color: var(--red300);
+.center-text {
+  text-align: center;
 }
 
-.offcanvas {
-    background-color: var(--backgroundColor) !important;
+.bold-text {
+  font-weight: bold;
 }
