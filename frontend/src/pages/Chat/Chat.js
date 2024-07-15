@@ -29,6 +29,7 @@ function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const divRef = useRef();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [selectedModel, setSelectedModel] = useState('mistral_ai');
 
   const handleClose = () => setShowChats(false);
   const handleShow = () => setShowChats(true);
@@ -71,37 +72,6 @@ function Chat() {
     }
   }, [chats, currentChat]);
 
-  useEffect(() => {
-    const getBotAnswer = async () => {
-      setIsLoading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://famous-quotes4.p.rapidapi.com/random',
-        params: {
-          category: 'all',
-          count: '1',
-        },
-        headers: {
-          'X-RapidAPI-Key': '48969325c7msh182124cce3b96dap1c5a70jsn7bca8705e06e',
-          'X-RapidAPI-Host': 'famous-quotes4.p.rapidapi.com',
-        },
-      };
-      try {
-        const response = await axios.request(options);
-        const content = response.data[0].text;
-        const botId = 1;
-        sendMessage(content, botId);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (currentChat) {
-      if (currentChat.messages.length === 0) return;
-      // const lastMessage = currentChat.messages[currentChat.messages.length - 1];
-    }
-  }, [currentChat]);
-
   const getChats = async (userId) => {
     setIsLoading(true);
     const endpoint = userId ? `api/chats-messages/?user_id=${userId}` : `api/chats-messages`;
@@ -124,10 +94,14 @@ function Chat() {
     setTimeout(scrollDown, 100);
   };
 
+  const handleModelChange = (event) => {
+    setSelectedModel(event.target.value);
+  };
+
   const sendMessage = async (message, user) => {
+    console.log(selectedModel);
     if (user !== 1) {
       try {
-        // Update messages for the current user
         await api.post('api/messages/', { chat: currentChat.id, content: message, user });
 
         const updatedChatMessages = { content: message, user };
@@ -319,8 +293,13 @@ function Chat() {
                   }}
                 ></div>
               )}
-              <h2 contentEditable='true'>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
-              <div style={{ width: '30px' }}></div>
+              <h2>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
+              <div style={{ display: 'flex' }}>
+                <select value={selectedModel} onChange={handleModelChange}>
+                  <option value='mistral_ai'>Mistral AI</option>
+                  <option value='llama_2_7b'>Llama 2 7B</option>
+                </select>
+              </div>
             </Card.Title>
             <div ref={divRef} className={styles['messages-container']}>
               {currentChat?.messages?.map(function (message, idx) {
@@ -412,7 +391,7 @@ function Chat() {
                     <h3>Links</h3>
                   </Card.Title>
                   <div className={styles['buttons-area']}>
-                    <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank' style={{ minWidth: '90%' }}>
+                    <Button as='a' href='https://github.com/chatbot-juridico/AI.dvogado' target='_blank' style={{ minWidth: '90%' }}>
                       Repositório
                     </Button>
                     <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7' target='_blank' style={{ minWidth: '90%' }}>
