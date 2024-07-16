@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -99,10 +98,15 @@ function Chat() {
   };
 
   const sendMessage = async (message, user) => {
-    console.log(selectedModel);
+    let endpoint, model;
     if (user !== 1) {
       try {
-        await api.post('api/messages/', { chat: currentChat.id, content: message, user });
+        if (selectedModel === 'mistral_ai') {
+          endpoint = 'jumpstart-dft-hf-llm-mistral-7b-ins-20240716-154302';
+        } else {
+          endpoint = 'ML-TCC-8x7B';
+        }
+        await api.post('api/messages/', { content: message, user: user, chat: currentChat.id, endpoint: endpoint });
 
         const updatedChatMessages = { content: message, user };
 
@@ -121,7 +125,7 @@ function Chat() {
         setIsLoading(true);
 
         // Post the message as BOT to generate response
-        await api.post('api/messages/', { chat: currentChat.id, content: message, user: 1 });
+        await api.post('api/messages/', { content: message, user: 1, chat: currentChat.id, endpoint: endpoint, model: model });
 
         // Fetch the BOT response
         const response = await api.get('api/messages/', { params: { chat: currentChat.id, user: 1, last: 1 } });

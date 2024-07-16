@@ -10,12 +10,14 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ["id", "chat", "user", "content"]
 
     def create(self, request):
-        if request.get('user').id != 1:
+        if request.get("user").id != 1:
             new_message = super().create(request)
             return new_message
         else:
             user_message = request.get("content")
-            bot_message = bot_response_api(user_message)
+            # endpoint = "ML-TCC-8x7B"
+            endpoint = "jumpstart-dft-hf-llm-mistral-7b-ins-20240716-154302"
+            bot_message = bot_response_api(user_message, endpoint)
 
             bot_response = {
                 "chat": request.get("chat"),
@@ -24,7 +26,6 @@ class MessageSerializer(serializers.ModelSerializer):
             }
             response = super().create(bot_response)
             return response
-
 
 
 class ChatSerializer(serializers.ModelSerializer):
