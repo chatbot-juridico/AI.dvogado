@@ -301,7 +301,7 @@ function Chat() {
               <div style={{ display: 'flex' }}>
                 <select value={selectedModel} onChange={handleModelChange}>
                   <option value='mistral_ai'>Mistral AI</option>
-                  <option value='llama_2_7b'>Llama 2 7B</option>
+                  <option value='llama_3_8b'>Llama 3 8B</option>
                 </select>
               </div>
             </Card.Title>
@@ -327,11 +327,11 @@ function Chat() {
                     {isBot && (
                       <span className={styles['message-actions']}>
                         <Button as='a' variant='Link' onClick={() => copyToClipboard(message)}>
-                          <img src={clipboard} alt='copy' style={{ height: '16px' }}></img>
+                          <img src={clipboard} alt='copy' style={{ height: '24px', width: '24px', margin: '5px', backgroundColor: '#FFF' }}></img>
                         </Button>
                         {isLastMessage && (
                           <Button as='a' variant='Link' onClick={() => reloadAnswer(message)}>
-                            <img src={reload} alt='reload' style={{ height: '16px' }}></img>
+                            <img src={reload} alt='reload' style={{ height: '24px', width: '24px', margin: '5px', backgroundColor: '#FFF' }}></img>
                           </Button>
                         )}
                       </span>
