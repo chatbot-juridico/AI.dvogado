@@ -98,14 +98,16 @@ function Chat() {
   };
 
   const sendMessage = async (message, user) => {
-    let endpoint, model;
+    let endpoint;
     if (user !== 1) {
       try {
         if (selectedModel === 'mistral_ai') {
-          endpoint = 'jumpstart-dft-hf-llm-mistral-7b-ins-20240716-154302';
+          endpoint = 'mistral';
         } else {
-          endpoint = 'ML-TCC-8x7B';
+          endpoint = 'llama';
         }
+
+        console.log(endpoint, user)
         await api.post('api/messages/', { content: message, user: user, chat: currentChat.id, endpoint: endpoint });
 
         const updatedChatMessages = { content: message, user };
@@ -125,7 +127,7 @@ function Chat() {
         setIsLoading(true);
 
         // Post the message as BOT to generate response
-        await api.post('api/messages/', { content: message, user: 1, chat: currentChat.id, endpoint: endpoint, model: model });
+        await api.post('api/messages/', { content: message, user: 1, chat: currentChat.id, endpoint: endpoint});
 
         // Fetch the BOT response
         const response = await api.get('api/messages/', { params: { chat: currentChat.id, user: 1, last: 1 } });

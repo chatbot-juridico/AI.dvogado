@@ -46,6 +46,7 @@
           justify-content: space-between;
 
           .message-content {
+            white-space: pre-line;
             display: flex;
             gap: 15px;
 
