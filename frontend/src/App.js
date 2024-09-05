@@ -9,31 +9,38 @@ import About from './pages/About/About';
 import SignIn from './pages/SignIn/SignIn';
 import Profile from './pages/Profile/Profile';
 import Feedback from './pages/Feedback/Feedback';
+import Home from './pages/Home/Home';
 
 import PrivateRoutes from './components/PrivateRoutes';
 import background from './assets/images/not-found-background.jpg';
 
 import './App.scss';
 
-
 function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path='/' element={<About />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/sign-in' element={<SignIn />} />
-        <Route path='/feedback' element={<Feedback />} />
-        <Route path='*' element={<NotFound />} />
-
-        <Route element={<PrivateRoutes />}>
+    <>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
           <Route path='/chat' element={<Chat />} />
-          <Route path='/profile' element={<Profile />} />
-        </Route>
-      </Routes>
-    </Router>
+          <Route path='/about' element={<About />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/feedback' element={<Feedback />} />
+          <Route path='*' element={<NotFound />} />
+
+          <Route element={<PrivateRoutes />}>
+            <Route path='/profile' element={<Profile />} />
+          </Route>
+        </Routes>
+      </Router>
+      <div style={{ position: 'relative', marginTop: '5rem', paddingBottom: '2%' }}>
+        <p style={{ textAlign: 'center', margin: '0', color: 'white' }}>Desenvolvido por Álvaro Gouvea e Luís Lins</p>
+        <p style={{ textAlign: 'center', margin: '0', color: 'white' }}>Universidade de Brasília - Faculdade do Gama</p>
+        <p style={{ textAlign: 'center', margin: '0', color: 'white' }}>Brasília - 2024</p>
+      </div>
+    </>
   );
 }
 
@@ -41,7 +48,7 @@ function NotFound() {
   return (
     <div
       style={{
-        backgroundImage: `url(${background})`, // Corrigido aqui
+        backgroundImage: `url(${background})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '91.7vh',

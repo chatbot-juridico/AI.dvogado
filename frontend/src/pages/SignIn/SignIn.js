@@ -5,10 +5,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Container } from 'react-bootstrap';
 
 import api from '../../services/api';
 
-import styles from './SignIn.module.css';
+import styles from './SignIn.module.scss';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -37,15 +38,15 @@ function SignIn() {
       })
       .catch((error) => {
         console.error('Ocorreu um erro: ', error);
-        setError('Erro:', error);
+        setError(error[0]);
       });
   };
 
   return (
-    <div className={styles.container}>
-      <Card className={styles.card}>
+    <Container className={styles['content']}>
+      <Card>
         <Card.Body>
-          <Card.Title className={styles.title}>
+          <Card.Title>
             <h1>Cadastro</h1>
           </Card.Title>
           <Form onSubmit={handleSubmit}>
@@ -92,18 +93,16 @@ function SignIn() {
               />
             </FloatingLabel>
             {error && <p className={styles['error-message']}>{error}</p>}
-            <div className={styles['submit-button']}>
+            <Container className={styles['action-buttons']}>
               <Button type='submit'>Criar Conta</Button>
-            </div>
+              <Button variant='secondary' type='button' onClick={() => navigate('/login')}>
+                Já tem uma conta?
+              </Button>
+            </Container>
           </Form>
-          <div className={styles['have-account']}>
-            <Button variant='secondary' onClick={() => navigate('/login')}>
-              Já tem uma conta?
-            </Button>
-          </div>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 }
 

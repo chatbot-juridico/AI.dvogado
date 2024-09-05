@@ -9,7 +9,9 @@ services:
       - "8000:8000"
     depends_on:
       - db
-
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
   react:
     container_name: Frontend
     build:

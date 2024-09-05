@@ -1,0 +1,28 @@
+.content {
+  padding-top: 15rem;
+  width: 50%;
+
+  h1 {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+  }
+
+  .form-input {
+    margin: 0 2rem 1.5rem;
+
+    input {
+      font-size: 18px;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+
+    button {
+      font-size: 18px;
+    }
+  }
+}

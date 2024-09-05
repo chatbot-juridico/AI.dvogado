@@ -1,0 +1,27 @@
+.form {
+  width: 50%;
+  margin: 2rem auto;
+
+  .form-input {
+    margin-bottom: 1.5rem;
+
+    input,
+    textarea {
+      font-size: 18px;
+    }
+  }
+
+  .submit-btn {
+    width: 15rem;
+    height: 4rem;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 3rem;
+  }
+}
+
+.feedback-list {
+  margin-top: 3em;
+}

@@ -1,0 +1,222 @@
+.content {
+  padding: 9rem 15px 0;
+  margin: 0 auto;
+
+  .card {
+    width: 100%;
+    padding: 0;
+    border: none;
+  }
+
+  .chat-column {
+    display: flex;
+    flex-direction: column;
+
+    .chat-card {
+      padding: 0 !important;
+
+      .chat-title {
+        display: flex;
+        margin: 0;
+        padding: 10px;
+        justify-content: space-between;
+        border-bottom: solid;
+        border-width: 1px;
+        border-color: gray;
+
+        h2 {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0;
+        }
+      }
+
+      .messages-container {
+        overflow-y: auto;
+        background-color: var(--white);
+        height: 64vh;
+
+        .message-box {
+          margin: 10px 175px 10px 10px;
+          padding: 10px;
+          background-color: #eee;
+          border-radius: 15px;
+          display: flex;
+          gap: 10px;
+          justify-content: space-between;
+
+          .message-content {
+            white-space: pre-line;
+            display: flex;
+            gap: 15px;
+
+            .message-icon {
+              height: 45px;
+              width: 45px;
+            }
+          }
+
+          .message-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 5px;
+          }
+        }
+
+        .loading {
+          display: flex;
+          justify-content: center;
+          margin: 20px 0;
+          color: var(--blue) !important;
+
+          .spinner-border {
+            color: var(--blue) !important;
+          }
+        }
+      }
+    }
+
+    .input-container {
+      background-color: #45a9b3;
+      border-radius: 0;
+
+      .input-card {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        textarea {
+          width: 100%;
+          padding: 10px;
+          border-radius: 10px;
+          margin-right: 15px;
+          min-height: 94px;
+        }
+
+        .send-message-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 45px;
+          min-width: 45px;
+          transition: 0.2s all;
+
+          &:hover {
+            min-height: 50px;
+            min-width: 60px;
+            background-color: var(--blue) !important;
+          }
+        }
+      }
+    }
+  }
+
+  .about-card {
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    background-color: white;
+    border-radius: 1rem;
+
+    .about-split-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+
+      .about-title-area {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+
+        .about-menu-icon {
+          width: 30px;
+          height: 30px;
+          transition: transform 0.3s ease-in-out;
+          margin: -15px;
+        }
+      }
+
+      .about-warning {
+        font-weight: bold;
+        margin-top: 10%;
+      }
+
+      .buttons-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 25px 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1255px) {
+  .about-card {
+    height: auto !important;
+  }
+
+  .about-warning {
+    margin-top: 0 !important;
+    margin-bottom: 25px !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .container {
+    gap: 25px;
+  }
+
+  .about-menu-icon {
+    display: none;
+  }
+
+  .about-warning {
+    margin-top: 0 !important;
+    margin-bottom: 25px !important;
+  }
+
+  .buttons-area {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .container {
+    padding: 25px 0 !important;
+  }
+
+  .chat-title h2 {
+    font-size: 20px;
+  }
+
+  .message-box {
+    margin: 10px !important;
+    font-size: 14px;
+  }
+
+  .message-icon {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .input-card {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  textarea {
+    margin-right: 0 !important;
+    min-height: none;
+  }
+
+  .send-message-button {
+    width: 60%;
+    justify-content: center;
+  }
+}

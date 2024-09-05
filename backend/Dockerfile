@@ -1,6 +1,11 @@
 # Use a imagem oficial do Python como base
 FROM python:3.9
 
+# Define Variaveis de ambiente
+ENV AWS_ACCESS_KEY_ID=
+ENV AWS_SECRET_ACCESS_KEY=
+ENV AWS_DEFAULT_REGION=
+
 # Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 

@@ -9,7 +9,8 @@ import SuccessModal from '../../components/SuccessModal';
 
 import api from '../../services/api';
 
-import styles from './Profile.module.css';
+import styles from './Profile.module.scss';
+import { Container } from 'react-bootstrap';
 
 function Profile() {
   const navigate = useNavigate();
@@ -84,10 +85,10 @@ function Profile() {
   };
 
   return (
-    <div className={styles.container}>
-      <Card className={styles.card}>
+    <Container className={styles['content']}>
+      <Card>
         <Card.Body>
-          <Card.Title className={styles.title}>
+          <Card.Title>
             <h1>Perfil</h1>
           </Card.Title>
           <Form>
@@ -137,7 +138,7 @@ function Profile() {
         </Card.Body>
       </Card>
       <SuccessModal show={showSuccessModal} handleClose={handleCloseSuccessModal} />
-    </div>
+    </Container>
   );
 }
 

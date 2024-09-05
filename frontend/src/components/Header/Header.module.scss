@@ -1,0 +1,49 @@
+.header {
+  color: white; /* Cor do texto */
+  height: 120px; /* Altura do header */
+  background-color: #45a9b3;
+  width: 100%; /* Largura total */
+  position: fixed; /* Fixar o header no topo */
+  top: 0; /* Posicionar no topo */
+  left: 0; /* Alinhar à esquerda */
+  z-index: 1000; /* Garantir que fique acima de outros elementos */
+  box-shadow: var(--defaultShadow);
+
+  .title {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: white;
+    margin: 0 2rem 0;
+  }
+}
+
+.navbar-nav {
+  margin-left: auto; /* Alinhar os itens à direita */
+}
+
+.nav-link {
+  color: white !important; /* Cor do texto dos links */
+  margin-right: 15px; /* Espaçamento entre os links */
+  cursor: pointer; /* Cursor de ponteiro ao passar por cima */
+  font-size: 20px;
+
+  &:hover {
+    transition: 0.7s all;
+    color: black !important;
+}
+}
+
+.dropdown {
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+.dropdown a {
+  color: var(--white);
+}
+
+.dropdown-item {
+  cursor: pointer;
+  color: black !important;
+}

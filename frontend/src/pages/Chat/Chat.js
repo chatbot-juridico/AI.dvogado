@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import axios from 'axios'; // TEMP
+import React, { useState, useEffect, useRef } from 'react';
 
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -9,15 +8,16 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
 import CloseButton from 'react-bootstrap/CloseButton';
+import Form from 'react-bootstrap/Form';
 
 import icon from '../../assets/icons/icon.png';
 import menu from '../../assets/icons/menu.png';
-import arrowUp from '../../assets/icons/arrow-up.png';
 import reload from '../../assets/icons/reload.png';
 import clipboard from '../../assets/icons/clipboard.png';
+import arrowUp from '../../assets/icons/arrow-up.png';
 
 import api from '../../services/api';
-import styles from './Chat.module.css';
+import styles from './Chat.module.scss';
 
 function Chat() {
   const [userId, setUserId] = useState(null);
@@ -28,6 +28,7 @@ function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const divRef = useRef();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [selectedModel, setSelectedModel] = useState('mistral_ai');
 
   const handleClose = () => setShowChats(false);
   const handleShow = () => setShowChats(true);
@@ -47,8 +48,10 @@ function Chat() {
         });
     };
 
-    if (!userId) {
+    if (localStorage.getItem('authToken')) {
       getUserId();
+    } else {
+      getChats(null);
     }
   }, [userId]);
 
@@ -68,71 +71,11 @@ function Chat() {
     }
   }, [chats, currentChat]);
 
-  const sendMessage = useCallback(
-    (message, user) => {
-      api
-        .post('api/messages/', { chat: currentChat.id, content: message, user: user })
-        .then((res) => {
-          const updatedChats = chats.map((chat) => {
-            if (chat.id === currentChat.id) {
-              return {
-                ...chat,
-                messages: [...chat.messages, res.data],
-              };
-            }
-            return chat;
-          });
-          setChats(updatedChats);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error('Error:' + err);
-        })
-        .finally(() => {
-          setInput('');
-        });
-    },
-    [chats, currentChat, setChats, setIsLoading, setInput]
-  );
-
-  useEffect(() => {
-    const getBotAnswer = async () => {
-      setIsLoading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://famous-quotes4.p.rapidapi.com/random',
-        params: {
-          category: 'all',
-          count: '1',
-        },
-        headers: {
-          'X-RapidAPI-Key': '48969325c7msh182124cce3b96dap1c5a70jsn7bca8705e06e',
-          'X-RapidAPI-Host': 'famous-quotes4.p.rapidapi.com',
-        },
-      };
-      try {
-        const response = await axios.request(options);
-        const content = response.data[0].text;
-        const botId = 1;
-        sendMessage(content, botId);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (currentChat) {
-      if (currentChat.messages.length === 0) return;
-      const lastMessage = currentChat.messages[currentChat.messages.length - 1];
-      if (lastMessage.user !== 1) {
-        getBotAnswer();
-      }
-    }
-  }, [currentChat]);
-
   const getChats = async (userId) => {
     setIsLoading(true);
+    const endpoint = userId ? `api/chats-messages/?user_id=${userId}` : `api/chats-messages`;
     return await api
-      .get(`api/chats-messages/?user_id=${userId}`)
+      .get(endpoint)
       .then((res) => {
         setChats(res.data);
         setIsLoading(false);
@@ -150,10 +93,66 @@ function Chat() {
     setTimeout(scrollDown, 100);
   };
 
+  const handleModelChange = (event) => {
+    setSelectedModel(event.target.value);
+  };
+
+  const sendMessage = async (message, user) => {
+    let endpoint;
+    if (user !== 1) {
+      try {
+        if (selectedModel === 'mistral_ai') {
+          endpoint = 'mistral';
+        } else {
+          endpoint = 'llama';
+        }
+
+        console.log(endpoint, user)
+        await api.post('api/messages/', { content: message, user: user, chat: currentChat.id, endpoint: endpoint });
+
+        const updatedChatMessages = { content: message, user };
+
+        const updatedChats = chats.map((chat) => {
+          if (chat.id === currentChat.id) {
+            return {
+              ...chat,
+              messages: [...chat.messages, updatedChatMessages],
+            };
+          }
+          return chat;
+        });
+
+        setChats(updatedChats);
+        setInput('');
+        setIsLoading(true);
+
+        // Post the message as BOT to generate response
+        await api.post('api/messages/', { content: message, user: 1, chat: currentChat.id, endpoint: endpoint});
+
+        // Fetch the BOT response
+        const response = await api.get('api/messages/', { params: { chat: currentChat.id, user: 1, last: 1 } });
+        const bot_message = response.data[0].content;
+
+        const botUpdatedChats = chats.map((chat) => {
+          if (chat.id === currentChat.id) {
+            return {
+              ...chat,
+              messages: [...chat.messages, updatedChatMessages, { content: bot_message, user: 1 }],
+            };
+          }
+          return chat;
+        });
+
+        setChats(botUpdatedChats);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  };
   const toggleMenu = (event) => {
     const icon = event.target;
-    let currentRotation =
-      parseInt(icon.style.transform.replace('rotate(', '').replace('deg)', ''), 10) || 0;
+    let currentRotation = parseInt(icon.style.transform.replace('rotate(', '').replace('deg)', ''), 10) || 0;
     currentRotation += 90;
     icon.style.transform = `rotate(${currentRotation}deg)`;
     setIsExpanded(!isExpanded);
@@ -227,18 +226,15 @@ function Chat() {
   };
 
   return (
-    <Row className={`${styles.container}`}>
+    <Row className={styles['content']}>
       {/* CHAT */}
       <Col lg={isExpanded ? 9 : 11} md={12} className={styles['chat-column']}>
-        {/* CHATS */}
+        {/* CHATS OVERLAY */}
         <Offcanvas show={showChats} onHide={handleClose}>
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>Suas Conversas</Offcanvas.Title>
           </Offcanvas.Header>
-          <Button
-            style={{ width: 'fit-content', marginLeft: '12px' }}
-            onClick={() => createChat(userId)}
-          >
+          <Button style={{ width: 'fit-content', marginLeft: '12px' }} onClick={() => createChat(userId)}>
             + Nova Conversa
           </Button>
           <hr />
@@ -265,10 +261,12 @@ function Chat() {
 
             <div
               style={{
-                position: 'absolute',
-                bottom: '20px',
-                width: '91%',
+                position: 'relative',
+                bottom: '0px',
+                width: '100%',
                 textAlign: 'center',
+                marginTop: '10px',
+                padding: '10px 0px',
               }}
             >
               <Button variant='danger' onClick={() => deleteChats()}>
@@ -279,21 +277,35 @@ function Chat() {
         </Offcanvas>
 
         {/* MESSAGES */}
-        <Card>
-          <Card.Body style={{ height: '64vh', padding: 0 }}>
-            <Card.Title className={`${styles.title} ${styles['chat-title']}`}>
-              <Button variant='link' onClick={handleShow}>
-                <img
+        <Card className={styles['card']}>
+          <Card.Body className={styles['chat-card']}>
+            <Card.Title className={styles['chat-title']}>
+              {(userId && (
+                <Button variant='link' onClick={handleShow}>
+                  <img
+                    style={{
+                      width: '30px',
+                      height: '30px',
+                    }}
+                    src={menu}
+                    alt='='
+                  />
+                </Button>
+              )) || (
+                <div
                   style={{
                     width: '30px',
                     height: '30px',
                   }}
-                  src={menu}
-                  alt='='
-                />
-              </Button>
+                ></div>
+              )}
               <h2>{currentChat?.title ? currentChat?.title : 'Chat'}</h2>
-              <div styles={{ width: '30px' }}></div>
+              <div style={{ display: 'flex' }}>
+                <select value={selectedModel} onChange={handleModelChange}>
+                  <option value='mistral_ai'>Mistral AI</option>
+                  <option value='llama_3_8b'>Llama 3 8B</option>
+                </select>
+              </div>
             </Card.Title>
             <div ref={divRef} className={styles['messages-container']}>
               {currentChat?.messages?.map(function (message, idx) {
@@ -305,22 +317,23 @@ function Chat() {
                     className={styles['message-box']}
                     style={{
                       margin: isBot ? '10px 10px 10px 175px' : '10px 175px 10px 10px',
-                      backgroundColor: isBot ? '#FFD700' : '#EEE',
+                      backgroundColor: isBot ? '#070928' : '#EEEEEE',
+                      color: isBot ? '#EEEEEE' : '',
                     }}
                   >
                     <span className={styles['message-content']}>
-                      <img className={styles['hide-icon']} src={icon} alt='*'></img>
+                      <img className={styles['message-icon']} src={icon} alt='*'></img>
                       <span>{message.content}</span>
                     </span>
 
                     {isBot && (
                       <span className={styles['message-actions']}>
-                        <Button variant='Link' onClick={() => copyToClipboard(message)}>
-                          <img src={clipboard} alt='copy' style={{ height: '16px' }}></img>
+                        <Button as='a' variant='Link' onClick={() => copyToClipboard(message)}>
+                          <img src={clipboard} alt='copy' style={{ height: '24px', width: '24px', margin: '5px', backgroundColor: '#FFF' }}></img>
                         </Button>
                         {isLastMessage && (
-                          <Button variant='Link' onClick={() => reloadAnswer(message)}>
-                            <img src={reload} alt='reload' style={{ height: '16px' }}></img>
+                          <Button as='a' variant='Link' onClick={() => reloadAnswer(message)}>
+                            <img src={reload} alt='reload' style={{ height: '24px', width: '24px', margin: '5px', backgroundColor: '#FFF' }}></img>
                           </Button>
                         )}
                       </span>
@@ -329,7 +342,7 @@ function Chat() {
                 );
               })}
               {isLoading && (
-                <div className={styles.loading}>
+                <div className={styles['loading']}>
                   <Spinner animation='border' />
                 </div>
               )}
@@ -338,85 +351,62 @@ function Chat() {
         </Card>
 
         {/* INPUT */}
-        <Card className={`${styles['input-container']}`}>
-          <Card.Body>
-            <div className={styles['input-content']}>
-              <div style={{ display: 'flex', width: '90%' }}>
-                <textarea
-                  placeholder='Sua mensagem...'
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  rows={2}
-                ></textarea>
-              </div>
-
-              <Button
-                onClick={() => sendMessage(input, userId)}
-                disabled={isLoading}
-                className={styles['send-message-button']}
-                style={{}}
-              >
-                <img
-                  style={{
-                    width: '25px',
-                    height: '25px',
-                  }}
-                  src={arrowUp}
-                  alt='^'
-                ></img>
-              </Button>
-            </div>
+        <Card className={`${styles['input-container']} ${styles['card']}`}>
+          <Card.Body className={styles['input-card']}>
+            <Form style={{ width: '92%' }}>
+              <Form.Control className={styles['input-textarea']} as='textarea' value={input} onChange={(e) => setInput(e.target.value)} placeholder='Sua mensagem...' required rows={2} />
+            </Form>
+            <Button onClick={() => sendMessage(input, userId)} disabled={isLoading} className={styles['send-message-button']}>
+              <img
+                style={{
+                  width: '25px',
+                  height: '25px',
+                }}
+                src={arrowUp}
+                alt='^'
+              ></img>
+            </Button>
           </Card.Body>
         </Card>
       </Col>
 
       {/* SOBRE */}
       {isExpanded && (
-        <Col lg={3} md={12}>
-          <Card className={`${styles.card} ${styles['card-height']} ${styles['chat-title']}`}>
-            <Card.Body className={styles['about-body']}>
-              <div>
-                <Button variant='link' onClick={toggleMenu}>
-                  <img className={styles['about-menu-icon']} src={menu} alt='*'></img>
-                </Button>
-                <Card.Title className={styles['center-content']}>
-                  <h2>Sobre</h2>
-                </Card.Title>
-                <Card.Text>
-                  Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por
-                  graduandos da Faculdade do Gama da Universidade de Brasília, com o tema
-                  “Utilização de Large Language Models no desenvolvimento de um chatbot para
-                  consultoria jurídico-trabalhista”.
-                </Card.Text>
-                <br />
-                <Card.Text className={styles['bold-text']}>
-                  Esse chatbot está sujeito a erros e não substitui uma consultoria real com um
-                  advogado.
-                </Card.Text>
-              </div>
-              <div className={styles.links}>
-                <Card.Title className={styles['center-content']}>
-                  <h3>Links</h3>
-                </Card.Title>
-                <div className={styles['buttons-area']}>
-                  <Button
-                    as='a'
-                    href='https://github.com/chatbot-juridico/Aplicacao'
-                    target='_blank'
-                    style={{ width: '65%' }}
-                  >
-                    Repositório
-                  </Button>
-                  <Button
-                    as='a'
-                    href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'
-                    target='_blank'
-                    style={{ width: '65%' }}
-                  >
-                    Artigo
-                  </Button>
+        <Col lg={3} md={12} sm={12}>
+          <Card className={styles['card']}>
+            <Card.Body className={styles['about-card']}>
+              <div className={styles['about-split-content']}>
+                <div>
+                  <div className={styles['about-title-area']}>
+                    <Button variant='link' onClick={toggleMenu}>
+                      <img className={styles['about-menu-icon']} src={menu} alt='*'></img>
+                    </Button>
+
+                    <Card.Title>
+                      <h2>Sobre</h2>
+                    </Card.Title>
+
+                    <div style={{ width: '15px' }}></div>
+                  </div>
+
+                  <Card.Text>Esse chatbot é o resultado de um trabalho de conclusão de curso realizado por graduandos da Faculdade do Gama da Universidade de Brasília, com o tema “Utilização de Large Language Models no desenvolvimento de um chatbot para consultoria jurídico-trabalhista”.</Card.Text>
+                  <Card.Text className={styles['about-warning']}>Esse chatbot está sujeito a erros e não substitui uma consultoria real com um advogado.</Card.Text>
+                </div>
+                <div style={{ width: '100%' }}>
+                  <Card.Title style={{ textAlign: 'center' }}>
+                    <h3>Links</h3>
+                  </Card.Title>
+                  <div className={styles['buttons-area']}>
+                    <Button as='a' href='https://github.com/chatbot-juridico/AI.dvogado' target='_blank' style={{ minWidth: '90%' }}>
+                      Repositório
+                    </Button>
+                    <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7' target='_blank' style={{ minWidth: '90%' }}>
+                      Artigo
+                    </Button>
+                  </div>
                 </div>
               </div>
+              {/* Split content */}
             </Card.Body>
           </Card>
         </Col>
@@ -424,29 +414,23 @@ function Chat() {
 
       {!isExpanded && (
         <Col lg={1} md={12}>
-          <Card className={`${styles.card} ${styles['card-height']} ${styles['chat-title']}`}>
-            <Card.Body
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '77vh',
-              }}
-            >
-              <Button variant='link' onClick={toggleMenu}>
-                <img className={styles['about-menu-icon']} src={menu} alt='*'></img>
-              </Button>
-              <div className={styles['buttons-area']}>
-                <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank'>
-                  Repo
-                </Button>
-                <Button
-                  as='a'
-                  href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7'
-                  target='_blank'
-                >
-                  Art.
-                </Button>
+          <Card className={styles['card']}>
+            <Card.Body className={styles['about-card']}>
+              <div className={styles['about-split-content']} style={{ alignItems: 'center' }}>
+                <div className={styles['about-title-area']}>
+                  <Button variant='link' onClick={toggleMenu}>
+                    <img className={styles['about-menu-icon']} src={menu} alt='='></img>
+                  </Button>
+                </div>
+
+                <div className={styles['buttons-area']}>
+                  <Button as='a' href='https://github.com/chatbot-juridico/Aplicacao' target='_blank' style={{ minWidth: '80%' }}>
+                    Repo
+                  </Button>
+                  <Button as='a' href='https://www.overleaf.com/project/6525f5f3a97e1300b8317ee7' target='_blank' style={{ minWidth: '80%' }}>
+                    Art.
+                  </Button>
+                </div>
               </div>
             </Card.Body>
           </Card>
