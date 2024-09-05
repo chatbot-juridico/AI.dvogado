@@ -12,15 +12,15 @@ services:
     dns:
       - 8.8.8.8
       - 8.8.4.4
-  # react:
-  #   container_name: Frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend:/app
+  react:
+    container_name: Frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
 
   db:
     container_name: Database

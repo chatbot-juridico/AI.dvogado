@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
--- Dumped by pg_dump version 16.2 (Debian 16.2-1.pgdg120+2)
+-- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
+-- Dumped by pg_dump version 16.3 (Debian 16.3-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -505,18 +505,18 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 30	Can change message	8	change_message
 31	Can delete message	8	delete_message
 32	Can view message	8	view_message
-33	Can add Token	9	add_token
-34	Can change Token	9	change_token
-35	Can delete Token	9	delete_token
-36	Can view Token	9	view_token
-37	Can add Token	10	add_tokenproxy
-38	Can change Token	10	change_tokenproxy
-39	Can delete Token	10	delete_tokenproxy
-40	Can view Token	10	view_tokenproxy
-41	Can add feedback	11	add_feedback
-42	Can change feedback	11	change_feedback
-43	Can delete feedback	11	delete_feedback
-44	Can view feedback	11	view_feedback
+33	Can add feedback	9	add_feedback
+34	Can change feedback	9	change_feedback
+35	Can delete feedback	9	delete_feedback
+36	Can view feedback	9	view_feedback
+37	Can add Token	10	add_token
+38	Can change Token	10	change_token
+39	Can delete Token	10	delete_token
+40	Can view Token	10	view_token
+41	Can add Token	11	add_tokenproxy
+42	Can change Token	11	change_tokenproxy
+43	Can delete Token	11	delete_tokenproxy
+44	Can view Token	11	view_tokenproxy
 \.
 
 
@@ -525,10 +525,6 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$600000$i45Rz8pCX3x4XapunN27Ya$glC9e52RGatX8bnUUS+ReBV12XrdP2SBEAHtKj/soJA=	\N	f	BOT			bot@email.com	t	t	2024-04-17 14:46:15.021723+00
-2	pbkdf2_sha256$600000$AwTGbeRxpnUN1e5yNB1YH2$PLRFMOfZBLu0prCGvt+baFsm3ywq9KjgcKbhZzEBcGY=	\N	f	admin			admin@email.com	t	t	2024-04-17 14:46:29.080333+00
-4	pbkdf2_sha256$600000$j2pt7Zl77KCijBIbzSnPRT$0Cnvfl2D76626smvXYggmffgB5I5DXagsEYKJYO07/c=	\N	f	julio			julinho@email.com	f	t	2024-04-17 15:18:10.768242+00
-3	pbkdf2_sha256$600000$tkiONtvvoEdUGCHLfsKBL6$UgbHozqUZgmKYxiHuxruticnoAqan2243w4r7/y04s8=	\N	f	Cleber			cleber@email.com	f	t	2024-04-17 15:14:12.277673+00
 \.
 
 
@@ -553,9 +549,6 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 --
 
 COPY public.authtoken_token (key, created, user_id) FROM stdin;
-c592411a23494a212bd4d8da1314e49b0c7dd32a	2024-04-17 14:46:38.779982+00	2
-4b82c59f2a16c51f410c8b203d3d4ebf95b6533c	2024-04-17 15:14:28.078562+00	3
-7f0d7277769ac96d1a64d214d3c05709917389f3	2024-04-17 15:18:16.200921+00	4
 \.
 
 
@@ -564,14 +557,6 @@ c592411a23494a212bd4d8da1314e49b0c7dd32a	2024-04-17 14:46:38.779982+00	2
 --
 
 COPY public.chats_chat (id, title, user_id) FROM stdin;
-9	Novo Chat 1	3
-13	Novo Chat 1	\N
-14	Novo Chat 1	\N
-17	Novo Chat 1	\N
-18	Novo Chat 1	\N
-25	Novo Chat 1	4
-55	Novo Chat	2
-58	Novo Chat 1	2
 \.
 
 
@@ -580,18 +565,6 @@ COPY public.chats_chat (id, title, user_id) FROM stdin;
 --
 
 COPY public.chats_message (id, content, chat_id, user_id) FROM stdin;
-3	Banana	55	2
-4	This was our last stop. This was it. We had those two embryos that we had banked prior to learning about the breast cancer, and with the medicine she was on, this was our last effort. The prayers were answered.	55	1
-7	Uau	55	2
-9	Ideas can be life-changing. Sometimes all you need to open the door is just one more good idea.	55	1
-10	Diga aí	58	2
-11	Remember the rights of the savage, as we call him. Remember that the happiness of his humble home, remember that the sanctity of life in the hill villages of Afghanistan, among the winter snows, is as inviolable in the eye of Almighty God, as can be your own.	58	1
-12	Interessante	58	2
-13	Your determination, selflessness and courage have brought the freedom struggle towards its fulfilment.	58	1
-14	E o que mais?	58	2
-15	Probably induced by the asthma, I started reading and writing early on, my literary efforts from the age of about nine running chiefly to poetry and plays.	58	1
-16	Olha só! Curioso	58	2
-17	Not only our future economic soundness but the very soundness of our democratic institutions depends on the determination of our government to give employment to idle men.	58	1
 \.
 
 
@@ -616,9 +589,9 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 6	sessions	session
 7	chats	chat
 8	chats	message
-9	authtoken	token
-10	authtoken	tokenproxy
-11	feedbacks	feedback
+9	feedbacks	feedback
+10	authtoken	token
+11	authtoken	tokenproxy
 \.
 
 
@@ -627,30 +600,30 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2024-04-17 14:40:18.115817+00
-2	auth	0001_initial	2024-04-17 14:40:18.178583+00
-3	admin	0001_initial	2024-04-17 14:40:18.198475+00
-4	admin	0002_logentry_remove_auto_add	2024-04-17 14:40:18.207746+00
-5	admin	0003_logentry_add_action_flag_choices	2024-04-17 14:40:18.219634+00
-6	contenttypes	0002_remove_content_type_name	2024-04-17 14:40:18.247572+00
-7	auth	0002_alter_permission_name_max_length	2024-04-17 14:40:18.263394+00
-8	auth	0003_alter_user_email_max_length	2024-04-17 14:40:18.277083+00
-9	auth	0004_alter_user_username_opts	2024-04-17 14:40:18.289013+00
-10	auth	0005_alter_user_last_login_null	2024-04-17 14:40:18.300865+00
-11	auth	0006_require_contenttypes_0002	2024-04-17 14:40:18.304481+00
-12	auth	0007_alter_validators_add_error_messages	2024-04-17 14:40:18.315602+00
-13	auth	0008_alter_user_username_max_length	2024-04-17 14:40:18.329536+00
-14	auth	0009_alter_user_last_name_max_length	2024-04-17 14:40:18.340537+00
-15	auth	0010_alter_group_name_max_length	2024-04-17 14:40:18.349052+00
-16	auth	0011_update_proxy_permissions	2024-04-17 14:40:18.358514+00
-17	auth	0012_alter_user_first_name_max_length	2024-04-17 14:40:18.370105+00
-18	authtoken	0001_initial	2024-04-17 14:40:18.391563+00
-19	authtoken	0002_auto_20160226_1747	2024-04-17 14:40:18.42063+00
-20	authtoken	0003_tokenproxy	2024-04-17 14:40:18.424587+00
-21	authtoken	0004_alter_tokenproxy_options	2024-04-17 14:40:18.431661+00
-22	chats	0001_initial	2024-04-17 14:40:18.47406+00
-23	sessions	0001_initial	2024-04-17 14:40:18.485491+00
-24	feedbacks	0001_initial	2024-04-17 21:30:19.619463+00
+1	contenttypes	0001_initial	2024-07-22 20:54:47.668407+00
+2	auth	0001_initial	2024-07-22 20:54:47.717942+00
+3	admin	0001_initial	2024-07-22 20:54:47.732912+00
+4	admin	0002_logentry_remove_auto_add	2024-07-22 20:54:47.738524+00
+5	admin	0003_logentry_add_action_flag_choices	2024-07-22 20:54:47.744186+00
+6	contenttypes	0002_remove_content_type_name	2024-07-22 20:54:47.754654+00
+7	auth	0002_alter_permission_name_max_length	2024-07-22 20:54:47.760781+00
+8	auth	0003_alter_user_email_max_length	2024-07-22 20:54:47.766662+00
+9	auth	0004_alter_user_username_opts	2024-07-22 20:54:47.772529+00
+10	auth	0005_alter_user_last_login_null	2024-07-22 20:54:47.779482+00
+11	auth	0006_require_contenttypes_0002	2024-07-22 20:54:47.781296+00
+12	auth	0007_alter_validators_add_error_messages	2024-07-22 20:54:47.787018+00
+13	auth	0008_alter_user_username_max_length	2024-07-22 20:54:47.795722+00
+14	auth	0009_alter_user_last_name_max_length	2024-07-22 20:54:47.801481+00
+15	auth	0010_alter_group_name_max_length	2024-07-22 20:54:47.807679+00
+16	auth	0011_update_proxy_permissions	2024-07-22 20:54:47.812718+00
+17	auth	0012_alter_user_first_name_max_length	2024-07-22 20:54:47.818633+00
+18	authtoken	0001_initial	2024-07-22 20:54:47.831337+00
+19	authtoken	0002_auto_20160226_1747	2024-07-22 20:54:47.84963+00
+20	authtoken	0003_tokenproxy	2024-07-22 20:54:47.851963+00
+21	authtoken	0004_alter_tokenproxy_options	2024-07-22 20:54:47.855671+00
+22	chats	0001_initial	2024-07-22 20:54:47.881685+00
+23	feedbacks	0001_initial	2024-07-22 20:54:47.887581+00
+24	sessions	0001_initial	2024-07-22 20:54:47.897358+00
 \.
 
 
@@ -667,10 +640,6 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 --
 
 COPY public.feedbacks_feedback (id, email, content) FROM stdin;
-1	teste@email.com	Achei bem de boa, bacana!
-2	teste@email.com	Achei bem de boa, bacana! 2
-3	teste2@tmail.com	asdasdasd
-4	teste4@email.com	asdadasd
 \.
 
 
@@ -706,7 +675,7 @@ SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_user_id_seq', 4, true);
+SELECT pg_catalog.setval('public.auth_user_id_seq', 1, false);
 
 
 --
@@ -720,14 +689,14 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: chats_chat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_chat_id_seq', 58, true);
+SELECT pg_catalog.setval('public.chats_chat_id_seq', 1, false);
 
 
 --
 -- Name: chats_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_message_id_seq', 17, true);
+SELECT pg_catalog.setval('public.chats_message_id_seq', 1, false);
 
 
 --
@@ -755,7 +724,7 @@ SELECT pg_catalog.setval('public.django_migrations_id_seq', 24, true);
 -- Name: feedbacks_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.feedbacks_feedback_id_seq', 4, true);
+SELECT pg_catalog.setval('public.feedbacks_feedback_id_seq', 1, false);
 
 
 --

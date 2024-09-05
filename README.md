@@ -10,7 +10,13 @@
 
 3. Baixar o Docker [aqui](https://docs.docker.com/get-docker/)
 
-4. Na raiz do projeto, usar o docker compose para instanciar os containeres:
+4. No Dockerfile encontrado no backend, preencha as variáveis de ambiente:
+   * ENV AWS_ACCESS_KEY_ID
+   * ENV AWS_SECRET_ACCESS_KEY
+   * ENV AWS_DEFAULT_REGION
+   De acordo com as instruções da sua conta AWS
+
+5. Na raiz do projeto, usar o docker compose para instanciar os containeres:
 
    `docker compose up`
 
@@ -18,7 +24,7 @@
 
    Backend: [localhost:8000/api](http://localhost:8000/api)
 
-5. Carregar backup do banco:
+6. Carregar backup do banco:
 
    `docker exec -it Database bash backup/backup_restore.sh`
 
@@ -26,6 +32,6 @@
 
    Nesse backup já tem um super usuário do Django.
 
-6. Ao manipular o banco de dados e desejar manter as alterações, faça o backup:
+7. Ao manipular o banco de dados e desejar manter as alterações, faça o backup:
 
    `docker exec -it Database bash backup/backup_data.sh`
